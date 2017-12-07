@@ -6,5 +6,103 @@
 </head>
 <script src="index.js"></script>
 <body>
+<script>
+//    var obj = {
+//        data:{
+//            bname: 'zhaowudi',
+//            id: 90,
+//        }
+//    };
+//    window.option = obj
+//    var obj2 = obj.data
+//    Object.keys(obj2).forEach((key) => {
+//        console.log('key',key)
+//        var value = obj2[key];
+//        Object.defineProperty(obj2,key,{
+//            enumerable:true,
+//            configurable:true,
+//            get: function() {
+//                return option['data'][key] || value
+//            },
+//            set: function(val) {
+//                _data[key] = val
+//            }
+//        })
+//    });
+//    for(var key in obj) {
+//        console.log(key)
+//        var value = obj[key]
+//        console.log('value',value)
+//        Object.defineProperty(obj,key,{
+//            enumerable:true,
+//            configurable:true,
+//            get: function() {
+//                console.log('key',key)
+//               return value
+//            },
+//            set: function(val) {
+//               obj`._${key}` = val
+//                //console.log(val)
+//            }
+//        })
+//    }
+
+//    Object.defineProperty(obj,key,{
+//        enumerable:true,
+//        configurable:true,
+//        get: function() {
+//            return obj[key.toString()]
+//        },
+//        set: function(val) {
+//            obj[key] = val
+//        }
+//    })
+
+//function observer(value, cb) {
+//    Object.keys(value).forEach((key) => defineReactive(value, key, value[key] , cb))
+//}
+//
+//function defineReactive (obj, key, val, cb) {
+//    Object.defineProperty(obj, key, {
+//        enumerable: true,
+//        configurable: true,
+//        get: ()=>{
+//            /*....依赖收集等....*/
+//            /*Github:https://github.com/answershuto*/
+//        },
+//        set:newVal=> {
+//            //obj[key] = newVal
+//            cb();/*订阅者收到消息的回调*/
+//        }
+//    })
+//}
+//function _proxy (data) {
+//    const that = window;
+//    Object.keys(data).forEach(key => {
+//        Object.defineProperty(that, key, {
+//            configurable: true,
+//            enumerable: true,
+//            get: function proxyGetter () {
+//                return that._data[key];
+//            },
+//            set: function proxySetter (val) {
+//                that._data[key] = val;
+//            }
+//        })
+//    });
+//}
+//options = {
+//    data:{
+//        wudi:'shiwo',
+//        you:'no'
+//    },
+//    render() {
+//        console.log('you are yes')
+//    }
+//}
+//window._data = options.data;
+////observer(window._data, options.render)
+//_proxy(options.data)
+</script>
 </body>
 </html>

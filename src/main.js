@@ -1,26 +1,25 @@
 /**
  * Created by zj on 2017/12/6.
  */
+import Dep from './Dep'
+import Watcher from './Watcher'
 class Vue {
     constructor(options) {
-        this._data = options.data
-        _proxy(this, options.render,this._data)
-        // observer(this._data, options.render)
+        this._data = options.data;
+        observer(this._data, options.render);
+        let watcher = new Watcher(this);
     }
 }
-function _proxy(object, cb,data) {
-    const that = object;
-    const obj = data;
+function _proxy(data,Vue) {
+    const that = Vue;
+    console.log('that',that)
     Object.keys(data).forEach((key) => {
-        console.log('data',data);
-        var val = that._data[key];
-        console.log(val)
-        console.log('obj',obj)
-       Object.defineProperty(that._data, key, {
-           enumberable: true,
+        console.log('data',data)
+       Object.defineProperty(data, key, {
+           enumerable: true,
            configurable: true,
             get: ()=>{
-                return obj[key]
+                return that._data[key] || 88
             },
             set:(val)=> {
                 that._data[key] = val;
@@ -29,15 +28,16 @@ function _proxy(object, cb,data) {
     })
 
 }
-// function observer(value, cb) {
-//     Object.keys(value).forEach((key) => {defineReactive(value, key, value[key] , cb)})
-// }
+function observer(value, cb) {
+    Object.keys(value).forEach((key) => {defineReactive(value, key, value[key] , cb)})
+}
 // function defineReactive(obj, key, val, cb) {
 //     Object.defineProperty(obj, key, {
-//         enumberable: true,
+//         enumerable: true,
 //         configurable: true,
 //         get: () => {
-//             return val
+//             console.log(1111)
+//             //return obj[key]
 //         },
 //         set: newVal =>{
 //
@@ -45,4 +45,24 @@ function _proxy(object, cb,data) {
 //         }
 //     })
 // }
+function defineReactive (obj, key, val, cb) {
+    const dep = new Dep();
+
+    Object.defineProperty(obj, key, {
+        enumerable: true,
+        configurable: true,
+        get: ()=>{
+            if (Dep.target) {
+                /*Watcher对象存在全局的Dep.target中*/
+                dep.addSub(Dep.target);
+            }
+        },
+        set:newVal=> {
+            /*只有之前addSub中的函数才会触发*/
+            dep.notify();
+        }
+    })
+}
+
+Dep.target = null;
 export default Vue;
