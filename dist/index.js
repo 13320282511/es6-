@@ -60,16 +60,17 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 0);
+/******/ 	return __webpack_require__(__webpack_require__.s = 1);
 /******/ })
 /************************************************************************/
 /******/ ([
-/* 0 */
+/* 0 */,
+/* 1 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__main_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__main_js__ = __webpack_require__(2);
 /**
  * Created by zj on 2017/12/6.
  */
@@ -87,58 +88,118 @@ window.p = new __WEBPACK_IMPORTED_MODULE_0__main_js__["a" /* default */]({
 });
 
 /***/ }),
-/* 1 */
+/* 2 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__core_observer_index__ = __webpack_require__(5);
+/**
+ * Created by zj on 2017/12/6.
+ */
+
+
+function  Vue(options) {
+    // this._data = options.data
+    // this._proxy(this._data)
+    // // observer(this._data, options.render)
+    // observe(this._data());
+    // _proxy(data) {
+    //     const that = this;
+    //     Object.keys(data).forEach((key) => {
+    //         Object.defineProperty(that, key, {
+    //             enumerable: true,
+    //             configurable: true,
+    //             get: ()=>{
+    //                 return that._data[key]
+    //             },
+    //             set:(val)=> {
+    //                 that._data[key] = val;
+    //             }
+    //         })
+    //     })
+    //
+    // }
+    this._init(options);
+}
+
+/* harmony default export */ __webpack_exports__["a"] = (Vue);
+
+/***/ }),
+/* 3 */,
+/* 4 */,
+/* 5 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* unused harmony export observe */
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__watcher__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__dep__ = __webpack_require__(7);
+/**
+ * Created by zj on 2017/12/8.
+ */
+
+
+class Observer {
+    constructor(value) {
+        new __WEBPACK_IMPORTED_MODULE_1__dep__["a" /* default */]()
+    }
+}
+/* unused harmony export default */
+
+function observe(value, asRootData) {
+    let ob;
+    ob =new Observer(value);
+    return ob;
+}
+
+/***/ }),
+/* 6 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /**
- * Created by zj on 2017/12/6.
+ * Created by zj on 2017/12/8.
  */
-class Vue {
-    constructor(options) {
-        this._data = options.data
-        _proxy(this, options.render,this._data)
-        // observer(this._data, options.render)
+class Watcher {
+    constructor(vm, expOrFn, cb, options) {
+        this.vm = vm;
+        this.cb = cb;
+        //Dep.target = this;
+        //console.log(Dep)
+
+    }
+    update() {
+
+    }
+    addDep(dep) {
+        dep.addSub(this)
     }
 }
-function _proxy(object, cb,data) {
-    const that = object;
-    const obj = data;
-    Object.keys(data).forEach((key) => {
-        console.log('data',data);
-        var val = that._data[key];
-        console.log(val)
-        console.log('obj',obj)
-       Object.defineProperty(that._data, key, {
-           enumberable: true,
-           configurable: true,
-            get: ()=>{
-                return obj[key]
-            },
-            set:(val)=> {
-                that._data[key] = val;
-            }
-        })
-    })
+/* unused harmony export default */
 
+
+/***/ }),
+/* 7 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__watcher__ = __webpack_require__(6);
+/**
+ * Created by zj on 2017/12/8.
+ */
+
+class Dep {
+    constructor() {
+        this.id = 1;
+        this.subs = [];
+    }
+    addSub(watcher) {
+        this.subs.push(watcher);
+    }
 }
-// function observer(value, cb) {
-//     Object.keys(value).forEach((key) => {defineReactive(value, key, value[key] , cb)})
-// }
-// function defineReactive(obj, key, val, cb) {
-//     Object.defineProperty(obj, key, {
-//         enumberable: true,
-//         configurable: true,
-//         get: () => {
-//             return val
-//         },
-//         set: newVal =>{
-//
-//             cb()
-//         }
-//     })
-// }
-/* harmony default export */ __webpack_exports__["a"] = (Vue);
+/* harmony export (immutable) */ __webpack_exports__["a"] = Dep;
+
+Dep.target = null;
 
 /***/ })
 /******/ ]);
