@@ -60,80 +60,17 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1);
+/******/ 	return __webpack_require__(__webpack_require__.s = 2);
 /******/ })
 /************************************************************************/
 /******/ ([
-/* 0 */,
-/* 1 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__main_js__ = __webpack_require__(2);
-/**
- * Created by zj on 2017/12/6.
- */
-
-
-window.p = new __WEBPACK_IMPORTED_MODULE_0__main_js__["a" /* default */]({
-    el:'#app',
-    data:{
-        text:'text1',
-        text2:'texttwo'
-    },
-    render() {
-        console.log('yes')
-    }
-});
-
-/***/ }),
-/* 2 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__core_observer_index__ = __webpack_require__(5);
-/**
- * Created by zj on 2017/12/6.
- */
-
-
-function  Vue(options) {
-    // this._data = options.data
-    // this._proxy(this._data)
-    // // observer(this._data, options.render)
-    // observe(this._data());
-    // _proxy(data) {
-    //     const that = this;
-    //     Object.keys(data).forEach((key) => {
-    //         Object.defineProperty(that, key, {
-    //             enumerable: true,
-    //             configurable: true,
-    //             get: ()=>{
-    //                 return that._data[key]
-    //             },
-    //             set:(val)=> {
-    //                 that._data[key] = val;
-    //             }
-    //         })
-    //     })
-    //
-    // }
-    this._init(options);
-}
-
-/* harmony default export */ __webpack_exports__["a"] = (Vue);
-
-/***/ }),
-/* 3 */,
-/* 4 */,
-/* 5 */
+/* 0 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* unused harmony export observe */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__watcher__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__dep__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__watcher__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__dep__ = __webpack_require__(4);
 /**
  * Created by zj on 2017/12/8.
  */
@@ -153,7 +90,7 @@ function observe(value, asRootData) {
 }
 
 /***/ }),
-/* 6 */
+/* 1 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -179,11 +116,43 @@ class Watcher {
 
 
 /***/ }),
-/* 7 */
+/* 2 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__watcher__ = __webpack_require__(6);
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__main_js__ = __webpack_require__(3);
+/**
+ * Created by zj on 2017/12/6.
+ */
+
+window.Vue = __WEBPACK_IMPORTED_MODULE_0__main_js__["a" /* default */];
+
+/***/ }),
+/* 3 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__core_observer_index__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__core_instance_init__ = __webpack_require__(5);
+/**
+ * Created by zj on 2017/12/6.
+ */
+
+
+
+function  Vue(options) {
+    this._init(options);
+}
+Object(__WEBPACK_IMPORTED_MODULE_1__core_instance_init__["a" /* initMixin */])(Vue);
+/* harmony default export */ __webpack_exports__["a"] = (Vue);
+
+/***/ }),
+/* 4 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__watcher__ = __webpack_require__(1);
 /**
  * Created by zj on 2017/12/8.
  */
@@ -200,6 +169,152 @@ class Dep {
 /* harmony export (immutable) */ __webpack_exports__["a"] = Dep;
 
 Dep.target = null;
+
+/***/ }),
+/* 5 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (immutable) */ __webpack_exports__["a"] = initMixin;
+/* unused harmony export resolveConstructorOptions */
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__util_options__ = __webpack_require__(6);
+/**
+ * Created by zj on 2017/12/8.
+ */
+
+let uid = 0;
+function initMixin(Vue) {
+    Vue.prototype._init = function(options) {
+        const vm = this;
+        vm._uid = uid++;
+        vm.$options = Object(__WEBPACK_IMPORTED_MODULE_0__util_options__["a" /* mergeOptions */])(
+            resolveConstructorOptions(vm.constructor),
+            options || {},
+            vm)
+    }
+}
+function resolveConstructorOptions (Ctor) {
+    let options = Ctor.options;
+    return options;
+}
+
+/***/ }),
+/* 6 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* unused harmony export mergeDataOrFn */
+/* harmony export (immutable) */ __webpack_exports__["a"] = mergeOptions;
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__shared_constants__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__config__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__shared_util__ = __webpack_require__(9);
+/**
+ * Created by zj on 2017/12/8.
+ */
+
+
+
+const strats = __WEBPACK_IMPORTED_MODULE_1__config__["a" /* default */].optionMergeStrategies;
+__WEBPACK_IMPORTED_MODULE_0__shared_constants__["a" /* ASSET_TYPES */].forEach(function(type) {
+    strats[type+'s'] = mergeAssets;
+})
+strats.data = function(parentVal, childVal, vm) {
+    if(!vm) {
+
+    }
+    return mergeDataOrFn(parentVal, childVal, vm)
+}
+function mergeAssets(parentVal, childVal, vm, key) {
+    const res = Object.create(parentVal || null);
+    if(childVal) {
+        return Object(__WEBPACK_IMPORTED_MODULE_2__shared_util__["a" /* extend */])(res, childVal)
+    }
+    return res;
+}
+function mergeDataOrFn(parentVal, childVal, vm) {
+    if(!vm) {
+
+    } else {
+        return function mergedInstanceDataFn () {
+            // instance merge
+            const instanceData = typeof childVal === 'function'
+                ? childVal.call(vm)
+                : childVal
+            const defaultData = typeof parentVal === 'function'
+                ? parentVal.call(vm)
+                : parentVal
+            if (instanceData) {
+                return mergeData(instanceData, defaultData)
+            } else {
+                return defaultData
+            }
+        }
+    }
+}
+function mergeOptions(parent, child, vm) {
+    console.log('parent',parent)
+    let key;
+    const options = {};
+    for(key in parent) {
+        mergeFiled(key)
+    }
+    for (key in child) {
+        // if (!parent.hasOwnProperty(key)) {
+        //     mergeField(key)
+        // }
+        mergeFiled(key)
+    }
+    function mergeFiled(key) {
+        const strat = strats[key];
+        options[key] = strat(parent[key], child[key], vm, key)
+    }
+    console.log('options',options)
+    return options;
+}
+
+/***/ }),
+/* 7 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/**
+ * Created by zj on 2017/12/11.
+ */
+const ASSET_TYPES = [
+    'component',
+    'directive',
+    'filter'
+]
+/* harmony export (immutable) */ __webpack_exports__["a"] = ASSET_TYPES;
+
+
+/***/ }),
+/* 8 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/**
+ * Created by zj on 2017/12/11.
+ */
+/* harmony default export */ __webpack_exports__["a"] = ({
+    optionMergeStrategies: Object.create(null)
+});
+
+/***/ }),
+/* 9 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (immutable) */ __webpack_exports__["a"] = extend;
+/**
+ * Created by zj on 2017/12/11.
+ */
+function extend(to, _from) {
+    for(var key in _from) {
+        to[key] = _from[key];
+    }
+    return to;
+}
 
 /***/ })
 /******/ ]);
