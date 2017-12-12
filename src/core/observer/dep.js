@@ -10,5 +10,11 @@ export default class Dep {
     addSub(watcher) {
         this.subs.push(watcher);
     }
+    notify() {
+        const subs = this.subs.slice();
+        for(let i = 0;i<subs.length;i++) {
+            subs[i].update();
+        }
+    }
 }
 Dep.target = null;

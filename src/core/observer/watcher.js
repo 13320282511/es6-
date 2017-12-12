@@ -1,6 +1,7 @@
 /**
  * Created by zj on 2017/12/8.
  */
+let uid = 0;
 export default class Watcher {
     constructor(vm, expOrFn, cb, options) {
         this.vm = vm;

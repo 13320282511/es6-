@@ -2,6 +2,7 @@
  * Created by zj on 2017/12/8.
  */
 import {mergeOptions} from '../util/options';
+import {initState} from './state'
 let uid = 0;
 export function initMixin(Vue) {
     Vue.prototype._init = function(options) {
@@ -11,6 +12,7 @@ export function initMixin(Vue) {
             resolveConstructorOptions(vm.constructor),
             options || {},
             vm)
+        initState(vm);
     }
 }
 export function resolveConstructorOptions (Ctor) {

@@ -1,11 +1,11 @@
 /**
  * Created by zj on 2017/12/6.
  */
-import Observer from './core/observer/index'
-import {observe} from './core/observer/index'
+import {stateMixin} from './core/instance/state'
 import {initMixin} from './core/instance/init'
 function  Vue(options) {
     this._init(options);
 }
 initMixin(Vue);
+// stateMixin(Vue)
 export default Vue;
