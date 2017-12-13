@@ -9,8 +9,8 @@ export default class Observer {
     constructor(value) {
         this.vmCount = 0;
         this.dep = new Dep();
-        console.log('value',value)
         def(value, '__ob__', this)
+        //我们平常都是一样写的对象，这里数组暂时先不考虑
         if (Array.isArray(value)) {
             const augment = hasProto
                 ? protoAugment
@@ -44,9 +44,7 @@ export function defineReactive(obj,
     // cater for pre-defined getter/setters
     const getter = property && property.get
     const setter = property && property.set
-console.log('www')
     let childOb = !shallow && observe(val)
-    console.log('childOb',childOb)
     Object.defineProperty(obj, key, {
         enumerable: true,
         configurable: true,

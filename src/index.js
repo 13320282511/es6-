@@ -4,4 +4,4 @@
 import {initGlobalAPI} from './core/global-api/index'
 import Vue from './main.js';
 initGlobalAPI(Vue);
-window.Vue = Vue;
+export default Vue;

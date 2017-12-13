@@ -1,17 +1,32 @@
 /**
  * Created by zj on 2017/12/8.
  */
-import {ASSET_TYPES} from '../../shared/constants'
+import {ASSET_TYPES,LIFECYCLE_HOOKS} from '../../shared/constants'
 import config from '../config'
-import {extend} from '../../shared/util'
+import {extend,hasOwn} from '../../shared/util'
 const strats = config.optionMergeStrategies;
 const defaultStrat = function (parentVal, childVal) {
     return childVal === undefined
         ? parentVal
         : childVal
 }
+function mergeHook (
+    parentVal,
+    childVal
+){
+    return childVal
+        ? parentVal
+            ? parentVal.concat(childVal)
+            : Array.isArray(childVal)
+                ? childVal
+                : [childVal]
+        : parentVal
+}
 ASSET_TYPES.forEach(function(type) {
     strats[type+'s'] = mergeAssets;
+})
+LIFECYCLE_HOOKS.forEach(hook => {
+    strats[hook] = mergeHook
 })
 strats.data = function(parentVal, childVal, vm) {
     if(!vm) {
@@ -54,8 +69,6 @@ export function mergeDataOrFn(parentVal, childVal, vm) {
             const defaultData = typeof parentVal === 'function'
                 ? parentVal.call(vm)
                 : parentVal
-            console.log('instanceData',instanceData)
-            console.log('defaultData',defaultData)
             if (instanceData) {
                 return mergeData(instanceData, defaultData)
             } else {
@@ -65,22 +78,19 @@ export function mergeDataOrFn(parentVal, childVal, vm) {
     }
 }
 export function mergeOptions(parent, child, vm) {
-    console.log('parent',parent)
     let key;
     const options = {};
     for(key in parent) {
         mergeFiled(key)
     }
     for (key in child) {
-        // if (!parent.hasOwnProperty(key)) {
-        //     mergeField(key)
-        // }
-        mergeFiled(key)
+        if (!hasOwn(parent,key)) {
+            mergeFiled(key)
+        }
     }
     function mergeFiled(key) {
-        const strat = strats[key];
+        const strat = strats[key] || defaultStrat;
         options[key] = strat(parent[key], child[key], vm, key)
     }
-    console.log('options',options)
     return options;
 }
