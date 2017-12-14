@@ -2,7 +2,7 @@
  * Created by zj on 2017/12/12.
  */
 import {isReserved} from '../util/lang'
-import {observe} from '../observer/index'
+import {observe,set,del} from '../observer/index'
 const sharedPropertyDefinition = {
     enumerable: true,
     configurable: true,

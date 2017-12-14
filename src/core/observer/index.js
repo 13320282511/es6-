@@ -2,9 +2,10 @@
  * Created by zj on 2017/12/8.
  */
 import Watcher from './watcher'
+import {isValidArrayIndex} from '../../shared/util'
 import Dep from './dep'
 import {def} from '../util/lang'
-import {hasOwn,isObject} from  '../../shared/util'
+import {hasOwn, isObject} from  '../../shared/util'
 export default class Observer {
     constructor(value) {
         this.vmCount = 0;
@@ -93,15 +94,18 @@ export function observe(value, asRootData) {
 }
 
 export function set(target, key, val) {
+    //判断是不是纯数组
     if (Array.isArray(target) && isValidArrayIndex(key)) {
         target.length = Math.max(target.length, key)
         target.splice(key, 1, val)
         return val
     }
+    //如果不是纯属组就走这步（判断key是否在target对象上），类数组状态。判断key不能是原型属性
     if (key in target && !(key in Object.prototype)) {
         target[key] = val
         return val
     }
+    //后面这些目前没清楚是做撒子的，在前面两种都不满足的情况下应该不常见
     const ob = (target).__ob__
     if (target._isVue || (ob && ob.vmCount)) {
         process.env.NODE_ENV !== 'production' && warn(
@@ -117,4 +121,30 @@ export function set(target, key, val) {
     defineReactive(ob.value, key, val)
     ob.dep.notify()
     return val
+}
+
+/**
+ * Delete a property and trigger change if necessary.
+ */
+export function del(target, key) {
+    if (Array.isArray(target) && isValidArrayIndex(key)) {
+        target.splice(key, 1)
+        return
+    }
+    const ob = (target).__ob__
+    if (target._isVue || (ob && ob.vmCount)) {
+        process.env.NODE_ENV !== 'production' && warn(
+            'Avoid deleting properties on a Vue instance or its root $data ' +
+            '- just set it to null.'
+        )
+        return
+    }
+    if (!hasOwn(target, key)) {
+        return
+    }
+    delete target[key]
+    if (!ob) {
+        return
+    }
+    ob.dep.notify()
 }

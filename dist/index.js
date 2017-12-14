@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 8);
+/******/ 	return __webpack_require__(__webpack_require__.s = 9);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -314,27 +314,119 @@ function def (obj, key, val, enumerable) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* WEBPACK VAR INJECTION */(function(process) {/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__dep__ = __webpack_require__(15);
 /**
  * Created by zj on 2017/12/8.
  */
+
 let uid = 0;
 class Watcher {
-    constructor(vm, expOrFn, cb, options) {
+    constructor(vm, expOrFn, cb, options,isRenderWatcher) {
         this.vm = vm;
         this.cb = cb;
         //Dep.target = this;
         //console.log(Dep)
-
+        if (isRenderWatcher) {
+            vm._watcher = this
+        }
+        vm._watchers.push(this)
+        // options
+        if (options) {
+            this.deep = !!options.deep
+            this.user = !!options.user
+            this.lazy = !!options.lazy
+            this.sync = !!options.sync
+        } else {
+            this.deep = this.user = this.lazy = this.sync = false
+        }
+        this.cb = cb
+        this.id = ++uid // uid for batching
+        this.active = true
+        this.dirty = this.lazy // for lazy watchers
+        this.deps = []
+        this.newDeps = []
+        this.depIds = new Set()
+        this.newDepIds = new Set()
+        this.expression = process.env.NODE_ENV !== 'production'
+            ? expOrFn.toString()
+            : ''
+        // parse expression for getter
+        if (typeof expOrFn === 'function') {
+            this.getter = expOrFn
+        } else {
+            this.getter = parsePath(expOrFn)
+            if (!this.getter) {
+                this.getter = function () {}
+                process.env.NODE_ENV !== 'production' && warn(
+                    `Failed watching path: "${expOrFn}" ` +
+                    'Watcher only accepts simple dot-delimited paths. ' +
+                    'For full control, use a function instead.',
+                    vm
+                )
+            }
+        }
+        this.value = this.lazy
+            ? undefined
+            : this.get()
     }
+    /**
+     * Evaluate the getter, and re-collect dependencies.
+     */
+    get () {
+        Object(__WEBPACK_IMPORTED_MODULE_0__dep__["c" /* pushTarget */])(this)
+        let value
+        const vm = this.vm
+        try {
+            value = this.getter.call(vm, vm)
+        } catch (e) {
+            if (this.user) {
+                handleError(e, vm, `getter for watcher "${this.expression}"`)
+            } else {
+                throw e
+            }
+        } finally {
+            // "touch" every property so they are all tracked as
+            // dependencies for deep watching
+            if (this.deep) {
+                traverse(value)
+            }
+            Object(__WEBPACK_IMPORTED_MODULE_0__dep__["b" /* popTarget */])()
+            this.cleanupDeps()
+        }
+        return value
+    }
+    /**
+     * Clean up for dependency collection.
+     */
+    cleanupDeps () {
+        let i = this.deps.length
+        while (i--) {
+            const dep = this.deps[i]
+            if (!this.newDepIds.has(dep.id)) {
+                dep.removeSub(this)
+            }
+        }
+        let tmp = this.depIds
+        this.depIds = this.newDepIds
+        this.newDepIds = tmp
+        this.newDepIds.clear()
+        tmp = this.deps
+        this.deps = this.newDeps
+        this.newDeps = tmp
+        this.newDeps.length = 0
+    }
+
     update() {
 
     }
     addDep(dep) {
         dep.addSub(this)
     }
+
 }
 /* harmony export (immutable) */ __webpack_exports__["a"] = Watcher;
 
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(0)))
 
 /***/ }),
 /* 4 */
@@ -348,7 +440,15 @@ class Watcher {
 
 /* harmony default export */ __webpack_exports__["a"] = ({
     optionMergeStrategies: Object.create(null),
-    _lifecycleHooks: __WEBPACK_IMPORTED_MODULE_0__shared_constants__["b" /* LIFECYCLE_HOOKS */]
+    _lifecycleHooks: __WEBPACK_IMPORTED_MODULE_0__shared_constants__["b" /* LIFECYCLE_HOOKS */],
+    /**
+     * Whether to record perf
+     */
+    performance: false,
+    /**
+     * Custom user key aliases for v-on
+     */
+    keyCodes: Object.create(null)
 });
 
 /***/ }),
@@ -358,9 +458,9 @@ class Watcher {
 "use strict";
 /* WEBPACK VAR INJECTION */(function(process) {/* unused harmony export proxy */
 /* harmony export (immutable) */ __webpack_exports__["a"] = initState;
-/* unused harmony export stateMixin */
+/* harmony export (immutable) */ __webpack_exports__["b"] = stateMixin;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__util_lang__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__observer_index__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__observer_index__ = __webpack_require__(14);
 /**
  * Created by zj on 2017/12/12.
  */
@@ -400,7 +500,7 @@ function initState (vm) {
     if (opts.data) {
         initData(vm)
     } else {
-        Object(__WEBPACK_IMPORTED_MODULE_1__observer_index__["a" /* observe */])(vm._data = {}, true /* asRootData */)
+        Object(__WEBPACK_IMPORTED_MODULE_1__observer_index__["b" /* observe */])(vm._data = {}, true /* asRootData */)
     }
     if (opts.computed) initComputed(vm, opts.computed)
     if (opts.watch && opts.watch !== nativeWatch) {
@@ -449,7 +549,7 @@ function initData(vm) {
         }
     }
     // observe data
-    Object(__WEBPACK_IMPORTED_MODULE_1__observer_index__["a" /* observe */])(data, true /* asRootData */)
+    Object(__WEBPACK_IMPORTED_MODULE_1__observer_index__["b" /* observe */])(data, true /* asRootData */)
 }
 
 function stateMixin(Vue) {
@@ -479,8 +579,8 @@ function stateMixin(Vue) {
     Object.defineProperty(Vue.prototype, '$data', dataDef)
     Object.defineProperty(Vue.prototype, '$props', propsDef)
 
-    Vue.prototype.$set = set
-    Vue.prototype.$delete = del
+    Vue.prototype.$set = __WEBPACK_IMPORTED_MODULE_1__observer_index__["c" /* set */]
+    Vue.prototype.$delete = __WEBPACK_IMPORTED_MODULE_1__observer_index__["a" /* del */]
 
     Vue.prototype.$watch = function (expOrFn,
                                      cb,
@@ -507,41 +607,102 @@ function stateMixin(Vue) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (immutable) */ __webpack_exports__["a"] = extend;
-/* harmony export (immutable) */ __webpack_exports__["b"] = hasOwn;
-/* harmony export (immutable) */ __webpack_exports__["c"] = isObject;
+/* harmony export (immutable) */ __webpack_exports__["b"] = extend;
+/* harmony export (immutable) */ __webpack_exports__["c"] = hasOwn;
+/* harmony export (immutable) */ __webpack_exports__["d"] = isObject;
+/* harmony export (immutable) */ __webpack_exports__["e"] = isValidArrayIndex;
+/* harmony export (immutable) */ __webpack_exports__["f"] = makeMap;
 /**
  * Created by zj on 2017/12/11.
  */
 function extend(to, _from) {
-    for(var key in _from) {
+    for (var key in _from) {
         to[key] = _from[key];
     }
     return to;
 }
 
 const hasOwnProperty = Object.prototype.hasOwnProperty
-function hasOwn (obj, key){
+function hasOwn(obj, key) {
     return hasOwnProperty.call(obj, key)
 }
 
-function isObject (obj) {
+function isObject(obj) {
     return obj !== null && typeof obj === 'object'
 }
 
+/**
+ * Check if val is a valid array index.
+ */
+function isValidArrayIndex(val) {
+    //暂时不清楚为什么还要String(val)
+    const n = parseFloat(String(val))
+    //如果n不是小数的正整数  而且必须是有限数字  NAN Infinity和-Infinity都不行
+    return n >= 0 && Math.floor(n) === n && isFinite(val)
+}
+const emptyObject = Object.freeze({})
+/* harmony export (immutable) */ __webpack_exports__["a"] = emptyObject;
+
+/**
+ * Make a map and return a function for checking if a key
+ * is in that map.
+ */
+function makeMap(str,
+                        expectsLowerCase) {
+    const map = Object.create(null)
+    const list = str.split(',')
+    for (let i = 0; i < list.length; i++) {
+        map[list[i]] = true
+    }
+    return expectsLowerCase
+        ? val => map[val.toLowerCase()]
+        : val => map[val]
+}
 
 /***/ }),
 /* 7 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(process) {/* harmony export (immutable) */ __webpack_exports__["b"] = mountComponent;
+/* WEBPACK VAR INJECTION */(function(process) {/* unused harmony export activeInstance */
+/* harmony export (immutable) */ __webpack_exports__["b"] = initLifecycle;
+/* harmony export (immutable) */ __webpack_exports__["d"] = mountComponent;
+/* harmony export (immutable) */ __webpack_exports__["c"] = lifecycleMixin;
 /* harmony export (immutable) */ __webpack_exports__["a"] = callHook;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__observer_watcher__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__vdom_patch__ = __webpack_require__(25);
 /**
  * Created by zj on 2017/12/13.
  */
 
+
+console.log('createPatchFunction',__WEBPACK_IMPORTED_MODULE_1__vdom_patch__["a" /* createPatchFunction */])
+let activeInstance = null;
+function initLifecycle (vm) {
+    const options = vm.$options
+
+    // locate first non-abstract parent
+    let parent = options.parent
+    if (parent && !options.abstract) {
+        while (parent.$options.abstract && parent.$parent) {
+            parent = parent.$parent
+        }
+        parent.$children.push(vm)
+    }
+
+    vm.$parent = parent
+    vm.$root = parent ? parent.$root : vm
+
+    vm.$children = []
+    vm.$refs = {}
+
+    vm._watcher = null
+    vm._inactive = null
+    vm._directInactive = false
+    vm._isMounted = false
+    vm._isDestroyed = false
+    vm._isBeingDestroyed = false
+}
 function mountComponent (
     vm,
     el,
@@ -610,7 +771,99 @@ function mountComponent (
     }
     return vm
 }
+function lifecycleMixin (Vue) {
+    Vue.prototype._update = function (vnode, hydrating) {
+        const vm= this
+        if (vm._isMounted) {
+            callHook(vm, 'beforeUpdate')
+        }
+        const prevEl = vm.$el
+        const prevVnode = vm._vnode
+        const prevActiveInstance = activeInstance
+        activeInstance = vm
+        vm._vnode = vnode
+        // Vue.prototype.__patch__ is injected in entry points
+        // based on the rendering backend used.
+        if (!prevVnode) {
+            // initial render
+            vm.$el = vm.__patch__(
+                vm.$el, vnode, hydrating, false /* removeOnly */,
+                vm.$options._parentElm,
+                vm.$options._refElm
+            )
+            // no need for the ref nodes after initial patch
+            // this prevents keeping a detached DOM tree in memory (#5851)
+            vm.$options._parentElm = vm.$options._refElm = null
+        } else {
+            // updates
+            vm.$el = vm.__patch__(prevVnode, vnode)
+        }
+        activeInstance = prevActiveInstance
+        // update __vue__ reference
+        if (prevEl) {
+            prevEl.__vue__ = null
+        }
+        if (vm.$el) {
+            vm.$el.__vue__ = vm
+        }
+        // if parent is an HOC, update its $el as well
+        if (vm.$vnode && vm.$parent && vm.$vnode === vm.$parent._vnode) {
+            vm.$parent.$el = vm.$el
+        }
+        // updated hook is called by the scheduler to ensure that children are
+        // updated in a parent's updated hook.
+    }
 
+    Vue.prototype.$forceUpdate = function () {
+        const vm = this
+        if (vm._watcher) {
+            vm._watcher.update()
+        }
+    }
+
+    Vue.prototype.$destroy = function () {
+        const vm = this
+        if (vm._isBeingDestroyed) {
+            return
+        }
+        callHook(vm, 'beforeDestroy')
+        vm._isBeingDestroyed = true
+        // remove self from parent
+        const parent = vm.$parent
+        if (parent && !parent._isBeingDestroyed && !vm.$options.abstract) {
+            remove(parent.$children, vm)
+        }
+        // teardown watchers
+        if (vm._watcher) {
+            vm._watcher.teardown()
+        }
+        let i = vm._watchers.length
+        while (i--) {
+            vm._watchers[i].teardown()
+        }
+        // remove reference from data ob
+        // frozen object may not have observer.
+        if (vm._data.__ob__) {
+            vm._data.__ob__.vmCount--
+        }
+        // call the last hook...
+        vm._isDestroyed = true
+        // invoke destroy hooks on current rendered tree
+        vm.__patch__(vm._vnode, null)
+        // fire destroyed hook
+        callHook(vm, 'destroyed')
+        // turn off all instance listeners.
+        vm.$off()
+        // remove __vue__ reference
+        if (vm.$el) {
+            vm.$el.__vue__ = null
+        }
+        // release circular reference (#6759)
+        if (vm.$vnode) {
+            vm.$vnode.parent = null
+        }
+    }
+}
 function callHook (vm, hook) {
     const handlers = vm.$options[hook]
     if (handlers) {
@@ -633,12 +886,44 @@ function callHook (vm, hook) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* WEBPACK VAR INJECTION */(function(process) {/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__web_runtime_index__ = __webpack_require__(9);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__web_util_index__ = __webpack_require__(19);
+/* WEBPACK VAR INJECTION */(function(process) {/* harmony export (immutable) */ __webpack_exports__["a"] = query;
 /**
  * Created by zj on 2017/12/13.
  */
+/**
+ * Query an element selector if it's not an element already.
+ */
+function query (el){
+    if (typeof el === 'string') {
+        const selected = document.querySelector(el)
+        if (!selected) {
+            process.env.NODE_ENV !== 'production' && warn(
+                'Cannot find element: ' + el
+            )
+            return document.createElement('div')
+        }
+        return selected
+    } else {
+        return el
+    }
+}
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(0)))
+
+/***/ }),
+/* 9 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* WEBPACK VAR INJECTION */(function(process) {/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__web_runtime_index__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__web_util_index__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__core_config__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__core_util_perf__ = __webpack_require__(22);
+/**
+ * Created by zj on 2017/12/13.
+ */
+
+
 
 
 const mount = __WEBPACK_IMPORTED_MODULE_0__web_runtime_index__["a" /* default */].prototype.$mount
@@ -685,8 +970,8 @@ __WEBPACK_IMPORTED_MODULE_0__web_runtime_index__["a" /* default */].prototype.$m
         }
         if (template) {
             /* istanbul ignore if */
-            if (process.env.NODE_ENV !== 'production' && config.performance && mark) {
-                mark('compile')
+            if (process.env.NODE_ENV !== 'production' && __WEBPACK_IMPORTED_MODULE_2__core_config__["a" /* default */].performance && __WEBPACK_IMPORTED_MODULE_3__core_util_perf__["a" /* mark */]) {
+                Object(__WEBPACK_IMPORTED_MODULE_3__core_util_perf__["a" /* mark */])('compile')
             }
 
             const { render, staticRenderFns } = compileToFunctions(template, {
@@ -699,27 +984,42 @@ __WEBPACK_IMPORTED_MODULE_0__web_runtime_index__["a" /* default */].prototype.$m
             options.staticRenderFns = staticRenderFns
 
             /* istanbul ignore if */
-            if (process.env.NODE_ENV !== 'production' && config.performance && mark) {
-                mark('compile end')
+            if (process.env.NODE_ENV !== 'production' && __WEBPACK_IMPORTED_MODULE_2__core_config__["a" /* default */].performance && __WEBPACK_IMPORTED_MODULE_3__core_util_perf__["a" /* mark */]) {
+                Object(__WEBPACK_IMPORTED_MODULE_3__core_util_perf__["a" /* mark */])('compile end')
                 measure(`vue ${this._name} compile`, 'compile', 'compile end')
             }
         }
     }
     return mount.call(this, el, hydrating)
 }
+
+/**
+ * Get outerHTML of elements, taking care
+ * of SVG elements in IE as well.
+ */
+function getOuterHTML (el){
+    if (el.outerHTML) {
+        return el.outerHTML
+    } else {
+        const container = document.createElement('div')
+        container.appendChild(el.cloneNode(true))
+        return container.innerHTML
+    }
+}
 window.Vue = __WEBPACK_IMPORTED_MODULE_0__web_runtime_index__["a" /* default */];
 /* harmony default export */ __webpack_exports__["default"] = (__WEBPACK_IMPORTED_MODULE_0__web_runtime_index__["a" /* default */]);
 /* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(0)))
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__index__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__core_util_index__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__core_index__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__core_util_index__ = __webpack_require__(18);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__core_instance_lifescycle__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__util_index__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__util_index__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__patch__ = __webpack_require__(26);
 /**
  * Created by zj on 2017/12/13.
  */
@@ -728,30 +1028,33 @@ window.Vue = __WEBPACK_IMPORTED_MODULE_0__web_runtime_index__["a" /* default */]
 
 
 
-__WEBPACK_IMPORTED_MODULE_0__index__["a" /* default */].prototype.$mount = function (el,
+
+// install platform patch function
+__WEBPACK_IMPORTED_MODULE_0__core_index__["a" /* default */].prototype.__patch__ = __WEBPACK_IMPORTED_MODULE_1__core_util_index__["b" /* inBrowser */] ? __WEBPACK_IMPORTED_MODULE_4__patch__["a" /* patch */] : function(){}
+__WEBPACK_IMPORTED_MODULE_0__core_index__["a" /* default */].prototype.$mount = function (el,
                                  hydrating) {
-    el = el && __WEBPACK_IMPORTED_MODULE_1__core_util_index__["a" /* inBrowser */] ? Object(__WEBPACK_IMPORTED_MODULE_3__util_index__["a" /* query */])(el) : undefined
-    return Object(__WEBPACK_IMPORTED_MODULE_2__core_instance_lifescycle__["b" /* mountComponent */])(this, el, hydrating)
+    el = el && __WEBPACK_IMPORTED_MODULE_1__core_util_index__["b" /* inBrowser */] ? Object(__WEBPACK_IMPORTED_MODULE_3__util_index__["a" /* query */])(el) : undefined
+    return Object(__WEBPACK_IMPORTED_MODULE_2__core_instance_lifescycle__["d" /* mountComponent */])(this, el, hydrating)
 }
-/* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0__index__["a" /* default */]);
+/* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0__core_index__["a" /* default */]);
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__core_global_api_index__ = __webpack_require__(11);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__main_js__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__global_api_index__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__instance_index_js__ = __webpack_require__(20);
 /**
  * Created by zj on 2017/12/6.
  */
 
 
-Object(__WEBPACK_IMPORTED_MODULE_0__core_global_api_index__["a" /* initGlobalAPI */])(__WEBPACK_IMPORTED_MODULE_1__main_js__["a" /* default */]);
-/* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_1__main_js__["a" /* default */]);
+Object(__WEBPACK_IMPORTED_MODULE_0__global_api_index__["a" /* initGlobalAPI */])(__WEBPACK_IMPORTED_MODULE_1__instance_index_js__["a" /* default */]);
+/* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_1__instance_index_js__["a" /* default */]);
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -775,36 +1078,19 @@ function initGlobalAPI(Vue) {
 }
 
 /***/ }),
-/* 12 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__core_instance_state__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__core_instance_init__ = __webpack_require__(15);
-/**
- * Created by zj on 2017/12/6.
- */
-
-
-function  Vue(options) {
-    this._init(options);
-}
-Object(__WEBPACK_IMPORTED_MODULE_1__core_instance_init__["a" /* initMixin */])(Vue);
-// stateMixin(Vue)
-/* harmony default export */ __webpack_exports__["a"] = (Vue);
-
-/***/ }),
-/* 13 */
+/* 13 */,
+/* 14 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(process) {/* unused harmony export defineReactive */
-/* harmony export (immutable) */ __webpack_exports__["a"] = observe;
-/* unused harmony export set */
+/* harmony export (immutable) */ __webpack_exports__["b"] = observe;
+/* harmony export (immutable) */ __webpack_exports__["c"] = set;
+/* harmony export (immutable) */ __webpack_exports__["a"] = del;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__watcher__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__dep__ = __webpack_require__(14);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__util_lang__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__shared_util__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__shared_util__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__dep__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__util_lang__ = __webpack_require__(2);
 /**
  * Created by zj on 2017/12/8.
  */
@@ -812,11 +1098,12 @@ Object(__WEBPACK_IMPORTED_MODULE_1__core_instance_init__["a" /* initMixin */])(V
 
 
 
+
 class Observer {
     constructor(value) {
         this.vmCount = 0;
-        this.dep = new __WEBPACK_IMPORTED_MODULE_1__dep__["a" /* default */]();
-        Object(__WEBPACK_IMPORTED_MODULE_2__util_lang__["a" /* def */])(value, '__ob__', this)
+        this.dep = new __WEBPACK_IMPORTED_MODULE_2__dep__["a" /* default */]();
+        Object(__WEBPACK_IMPORTED_MODULE_3__util_lang__["a" /* def */])(value, '__ob__', this)
         //我们平常都是一样写的对象，这里数组暂时先不考虑
         if (Array.isArray(value)) {
             const augment = hasProto
@@ -844,7 +1131,7 @@ function defineReactive(obj,
                                val,
                                customSetter,
                                shallow) {
-    const dep = new __WEBPACK_IMPORTED_MODULE_1__dep__["a" /* default */]()
+    const dep = new __WEBPACK_IMPORTED_MODULE_2__dep__["a" /* default */]()
     const property = Object.getOwnPropertyDescriptor(obj, key)
     if (property && property.configurable === false) {
         return
@@ -859,7 +1146,7 @@ function defineReactive(obj,
         configurable: true,
         get: function reactiveGetter() {
             const value = getter ? getter.call(obj) : val
-            if (__WEBPACK_IMPORTED_MODULE_1__dep__["a" /* default */].target) {
+            if (__WEBPACK_IMPORTED_MODULE_2__dep__["a" /* default */].target) {
                 dep.depend()
                 if (childOb) {
                     childOb.dep.depend()
@@ -892,7 +1179,7 @@ function defineReactive(obj,
 }
 
 function observe(value, asRootData) {
-    if (!Object(__WEBPACK_IMPORTED_MODULE_3__shared_util__["c" /* isObject */])(value)) {
+    if (!Object(__WEBPACK_IMPORTED_MODULE_1__shared_util__["d" /* isObject */])(value)) {
         return
     }
     let ob;
@@ -902,15 +1189,18 @@ function observe(value, asRootData) {
 }
 
 function set(target, key, val) {
-    if (Array.isArray(target) && isValidArrayIndex(key)) {
+    //判断是不是纯数组
+    if (Array.isArray(target) && Object(__WEBPACK_IMPORTED_MODULE_1__shared_util__["e" /* isValidArrayIndex */])(key)) {
         target.length = Math.max(target.length, key)
         target.splice(key, 1, val)
         return val
     }
+    //如果不是纯属组就走这步（判断key是否在target对象上），类数组状态。判断key不能是原型属性
     if (key in target && !(key in Object.prototype)) {
         target[key] = val
         return val
     }
+    //后面这些目前没清楚是做撒子的，在前面两种都不满足的情况下应该不常见
     const ob = (target).__ob__
     if (target._isVue || (ob && ob.vmCount)) {
         process.env.NODE_ENV !== 'production' && warn(
@@ -927,13 +1217,41 @@ function set(target, key, val) {
     ob.dep.notify()
     return val
 }
+
+/**
+ * Delete a property and trigger change if necessary.
+ */
+function del(target, key) {
+    if (Array.isArray(target) && Object(__WEBPACK_IMPORTED_MODULE_1__shared_util__["e" /* isValidArrayIndex */])(key)) {
+        target.splice(key, 1)
+        return
+    }
+    const ob = (target).__ob__
+    if (target._isVue || (ob && ob.vmCount)) {
+        process.env.NODE_ENV !== 'production' && warn(
+            'Avoid deleting properties on a Vue instance or its root $data ' +
+            '- just set it to null.'
+        )
+        return
+    }
+    if (!Object(__WEBPACK_IMPORTED_MODULE_1__shared_util__["c" /* hasOwn */])(target, key)) {
+        return
+    }
+    delete target[key]
+    if (!ob) {
+        return
+    }
+    ob.dep.notify()
+}
 /* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(0)))
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony export (immutable) */ __webpack_exports__["c"] = pushTarget;
+/* harmony export (immutable) */ __webpack_exports__["b"] = popTarget;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__watcher__ = __webpack_require__(3);
 /**
  * Created by zj on 2017/12/8.
@@ -957,20 +1275,36 @@ class Dep {
 /* harmony export (immutable) */ __webpack_exports__["a"] = Dep;
 
 Dep.target = null;
+const targetStack = []
+
+function pushTarget (_target) {
+    if (Dep.target) targetStack.push(Dep.target)
+    Dep.target = _target
+}
+function popTarget () {
+    Dep.target = targetStack.pop()
+}
+
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (immutable) */ __webpack_exports__["a"] = initMixin;
+/* WEBPACK VAR INJECTION */(function(process) {/* harmony export (immutable) */ __webpack_exports__["a"] = initMixin;
 /* unused harmony export resolveConstructorOptions */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__util_options__ = __webpack_require__(16);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__state__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__lifescycle__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__config__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__util_index__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__util_options__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__state__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__proxy__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__lifescycle__ = __webpack_require__(7);
 /**
  * Created by zj on 2017/12/8.
  */
+
+
+
 
 
 
@@ -979,13 +1313,39 @@ function initMixin(Vue) {
     Vue.prototype._init = function(options) {
         const vm = this;
         vm._uid = uid++;
-        vm.$options = Object(__WEBPACK_IMPORTED_MODULE_0__util_options__["a" /* mergeOptions */])(
-            resolveConstructorOptions(vm.constructor),
-            options || {},
-            vm)
-        Object(__WEBPACK_IMPORTED_MODULE_1__state__["a" /* initState */])(vm);
-        Object(__WEBPACK_IMPORTED_MODULE_2__lifescycle__["a" /* callHook */])(vm, 'beforeCreate');
-        Object(__WEBPACK_IMPORTED_MODULE_2__lifescycle__["a" /* callHook */])(vm, 'created');
+        let startTag, endTag
+        /* istanbul ignore if */
+        if (process.env.NODE_ENV !== 'production' && __WEBPACK_IMPORTED_MODULE_0__config__["a" /* default */].performance && __WEBPACK_IMPORTED_MODULE_1__util_index__["d" /* mark */]) {
+            startTag = `vue-perf-start:${vm._uid}`
+            endTag = `vue-perf-end:${vm._uid}`
+            Object(__WEBPACK_IMPORTED_MODULE_1__util_index__["d" /* mark */])(startTag)
+        }
+
+        // a flag to avoid this being observed
+        vm._isVue = true
+        // merge options
+        if (options && options._isComponent) {
+            // optimize internal component instantiation
+            // since dynamic options merging is pretty slow, and none of the
+            // internal component options needs special treatment.
+            initInternalComponent(vm, options)
+        } else {
+            vm.$options = Object(__WEBPACK_IMPORTED_MODULE_2__util_options__["a" /* mergeOptions */])(
+                resolveConstructorOptions(vm.constructor),
+                options || {},
+                vm
+            )
+        }
+        /* istanbul ignore else */
+        if (process.env.NODE_ENV !== 'production') {
+            Object(__WEBPACK_IMPORTED_MODULE_4__proxy__["a" /* initProxy */])(vm)
+        } else {
+            vm._renderProxy = vm
+        }
+        Object(__WEBPACK_IMPORTED_MODULE_5__lifescycle__["b" /* initLifecycle */])(vm);
+        Object(__WEBPACK_IMPORTED_MODULE_5__lifescycle__["a" /* callHook */])(vm, 'beforeCreate');
+        Object(__WEBPACK_IMPORTED_MODULE_3__state__["a" /* initState */])(vm);
+        Object(__WEBPACK_IMPORTED_MODULE_5__lifescycle__["a" /* callHook */])(vm, 'created');
         if (vm.$options.el) {
             vm.$mount(vm.$options.el)
         }
@@ -995,9 +1355,10 @@ function resolveConstructorOptions (Ctor) {
     let options = Ctor.options;
     return options;
 }
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(0)))
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1045,7 +1406,7 @@ strats.data = function(parentVal, childVal, vm) {
 function mergeAssets(parentVal, childVal, vm, key) {
     const res = Object.create(parentVal || null);
     if(childVal) {
-        return Object(__WEBPACK_IMPORTED_MODULE_2__shared_util__["a" /* extend */])(res, childVal)
+        return Object(__WEBPACK_IMPORTED_MODULE_2__shared_util__["b" /* extend */])(res, childVal)
     }
     return res;
 }
@@ -1057,7 +1418,7 @@ function mergeData (to, from) {
         key = keys[i]
         toVal = to[key]
         fromVal = from[key]
-        if (!Object(__WEBPACK_IMPORTED_MODULE_2__shared_util__["b" /* hasOwn */])(to, key)) {
+        if (!Object(__WEBPACK_IMPORTED_MODULE_2__shared_util__["c" /* hasOwn */])(to, key)) {
             set(to, key, fromVal)
         } else if (isPlainObject(toVal) && isPlainObject(fromVal)) {
             mergeData(toVal, fromVal)
@@ -1092,7 +1453,7 @@ function mergeOptions(parent, child, vm) {
         mergeFiled(key)
     }
     for (key in child) {
-        if (!Object(__WEBPACK_IMPORTED_MODULE_2__shared_util__["b" /* hasOwn */])(parent,key)) {
+        if (!Object(__WEBPACK_IMPORTED_MODULE_2__shared_util__["c" /* hasOwn */])(parent,key)) {
             mergeFiled(key)
         }
     }
@@ -1104,22 +1465,29 @@ function mergeOptions(parent, child, vm) {
 }
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__env__ = __webpack_require__(18);
-/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_0__env__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__lang__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__shared_util__ = __webpack_require__(6);
+/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_0__shared_util__["a"]; });
+/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "c", function() { return __WEBPACK_IMPORTED_MODULE_0__shared_util__["f"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__env__ = __webpack_require__(19);
+/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "b", function() { return __WEBPACK_IMPORTED_MODULE_1__env__["a"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__lang__ = __webpack_require__(2);
 /* unused harmony namespace reexport */
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__perf__ = __webpack_require__(22);
+/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "d", function() { return __WEBPACK_IMPORTED_MODULE_3__perf__["a"]; });
 /**
  * Created by zj on 2017/12/13.
  */
 
 
 
+
+
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1131,32 +1499,361 @@ const inBrowser = typeof window !== 'undefined'
 
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(process) {/* harmony export (immutable) */ __webpack_exports__["a"] = query;
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__state__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__init__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__render__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__lifescycle__ = __webpack_require__(7);
 /**
- * Created by zj on 2017/12/13.
+ * Created by zj on 2017/12/6.
  */
+
+
+
+
+function  Vue(options) {
+    this._init(options);
+}
+Object(__WEBPACK_IMPORTED_MODULE_1__init__["a" /* initMixin */])(Vue);
+Object(__WEBPACK_IMPORTED_MODULE_0__state__["b" /* stateMixin */])(Vue);
+Object(__WEBPACK_IMPORTED_MODULE_3__lifescycle__["c" /* lifecycleMixin */])(Vue);
+Object(__WEBPACK_IMPORTED_MODULE_2__render__["a" /* renderMixin */])(Vue);
+/* harmony default export */ __webpack_exports__["a"] = (Vue);
+
+/***/ }),
+/* 21 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(process) {/* harmony export (immutable) */ __webpack_exports__["a"] = renderMixin;
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__util_index__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__vdom_vnode__ = __webpack_require__(24);
 /**
- * Query an element selector if it's not an element already.
+ * Created by zj on 2017/12/14.
  */
-function query (el){
-    if (typeof el === 'string') {
-        const selected = document.querySelector(el)
-        if (!selected) {
-            process.env.NODE_ENV !== 'production' && warn(
-                'Cannot find element: ' + el
-            )
-            return document.createElement('div')
+
+
+function renderMixin (Vue) {
+    // install runtime convenience helpers
+    //installRenderHelpers(Vue.prototype)
+
+    Vue.prototype.$nextTick = function (fn) {
+        return nextTick(fn, this)
+    }
+
+    Vue.prototype._render = function (){
+        const vm = this
+        const { render, _parentVnode } = vm.$options
+
+        if (vm._isMounted) {
+            // if the parent didn't update, the slot nodes will be the ones from
+            // last render. They need to be cloned to ensure "freshness" for this render.
+            for (const key in vm.$slots) {
+                const slot = vm.$slots[key]
+                // _rendered is a flag added by renderSlot, but may not be present
+                // if the slot is passed from manually written render functions
+                if (slot._rendered || (slot[0] && slot[0].elm)) {
+                    vm.$slots[key] = cloneVNodes(slot, true /* deep */)
+                }
+            }
         }
-        return selected
-    } else {
-        return el
+
+        vm.$scopedSlots = (_parentVnode && _parentVnode.data.scopedSlots) || __WEBPACK_IMPORTED_MODULE_0__util_index__["a" /* emptyObject */]
+
+        // set parent vnode. this allows render functions to have access
+        // to the data on the placeholder node.
+        vm.$vnode = _parentVnode
+        // render self
+        let vnode
+        try {
+            console.log('render',render)
+            console.log('vm._renderProxy',vm._renderProxy)
+            console.log('vm.$createElement',vm.$createElement)
+            vnode = render.call(vm._renderProxy)
+            //vnode = render.call(vm._renderProxy, vm.$createElement)
+        } catch (e) {
+            handleError(e, vm, `render`)
+            // return error render result,
+            // or previous vnode to prevent render error causing blank component
+            /* istanbul ignore else */
+            if (process.env.NODE_ENV !== 'production') {
+                if (vm.$options.renderError) {
+                    try {
+                        vnode = vm.$options.renderError.call(vm._renderProxy, vm.$createElement, e)
+                    } catch (e) {
+                        handleError(e, vm, `renderError`)
+                        vnode = vm._vnode
+                    }
+                } else {
+                    vnode = vm._vnode
+                }
+            } else {
+                vnode = vm._vnode
+            }
+        }
+        // return empty vnode in case the render function errored out
+        if (!(vnode instanceof __WEBPACK_IMPORTED_MODULE_1__vdom_vnode__["b" /* default */])) {
+            if (process.env.NODE_ENV !== 'production' && Array.isArray(vnode)) {
+                warn(
+                    'Multiple root nodes returned from render function. Render function ' +
+                    'should return a single root node.',
+                    vm
+                )
+            }
+            vnode = Object(__WEBPACK_IMPORTED_MODULE_1__vdom_vnode__["a" /* createEmptyVNode */])()
+        }
+        // set parent
+        vnode.parent = _parentVnode
+        return vnode
+    }
+}
+
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(0)))
+
+/***/ }),
+/* 22 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(process) {/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return mark; });
+/* unused harmony export measure */
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__env__ = __webpack_require__(19);
+/**
+ * Created by zj on 2017/12/14.
+ */
+
+let mark
+let measure
+
+if (process.env.NODE_ENV !== 'production') {
+    const perf = __WEBPACK_IMPORTED_MODULE_0__env__["a" /* inBrowser */] && window.performance
+    /* istanbul ignore if */
+    if (
+        perf &&
+        perf.mark &&
+        perf.measure &&
+        perf.clearMarks &&
+        perf.clearMeasures
+    ) {
+        mark = tag => perf.mark(tag)
+        measure = (name, startTag, endTag) => {
+            perf.measure(name, startTag, endTag)
+            perf.clearMarks(startTag)
+            perf.clearMarks(endTag)
+            perf.clearMeasures(name)
+        }
     }
 }
 /* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(0)))
+
+/***/ }),
+/* 23 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(process) {/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return initProxy; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__config__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__util_index__ = __webpack_require__(18);
+/**
+ * Created by zj on 2017/12/14.
+ */
+
+
+let initProxy
+
+if (process.env.NODE_ENV !== 'production') {
+    const allowedGlobals = Object(__WEBPACK_IMPORTED_MODULE_1__util_index__["c" /* makeMap */])(
+        'Infinity,undefined,NaN,isFinite,isNaN,' +
+        'parseFloat,parseInt,decodeURI,decodeURIComponent,encodeURI,encodeURIComponent,' +
+        'Math,Number,Date,Array,Object,Boolean,String,RegExp,Map,Set,JSON,Intl,' +
+        'require' // for Webpack/Browserify
+    )
+
+    const warnNonPresent = (target, key) => {
+        warn(
+            `Property or method "${key}" is not defined on the instance but ` +
+            'referenced during render. Make sure that this property is reactive, ' +
+            'either in the data option, or for class-based components, by ' +
+            'initializing the property. ' +
+            'See: https://vuejs.org/v2/guide/reactivity.html#Declaring-Reactive-Properties.',
+            target
+        )
+    }
+
+    const hasProxy =
+        typeof Proxy !== 'undefined' &&
+        Proxy.toString().match(/native code/)
+
+    if (hasProxy) {
+        const isBuiltInModifier = Object(__WEBPACK_IMPORTED_MODULE_1__util_index__["c" /* makeMap */])('stop,prevent,self,ctrl,shift,alt,meta,exact')
+        __WEBPACK_IMPORTED_MODULE_0__config__["a" /* default */].keyCodes = new Proxy(__WEBPACK_IMPORTED_MODULE_0__config__["a" /* default */].keyCodes, {
+            set (target, key, value) {
+                if (isBuiltInModifier(key)) {
+                    warn(`Avoid overwriting built-in modifier in config.keyCodes: .${key}`)
+                    return false
+                } else {
+                    target[key] = value
+                    return true
+                }
+            }
+        })
+    }
+
+    const hasHandler = {
+        has (target, key) {
+            const has = key in target
+            const isAllowed = allowedGlobals(key) || key.charAt(0) === '_'
+            if (!has && !isAllowed) {
+                warnNonPresent(target, key)
+            }
+            return has || !isAllowed
+        }
+    }
+
+    const getHandler = {
+        get (target, key) {
+            if (typeof key === 'string' && !(key in target)) {
+                warnNonPresent(target, key)
+            }
+            return target[key]
+        }
+    }
+
+    initProxy = function initProxy (vm) {
+        if (hasProxy) {
+            // determine which proxy handler to use
+            const options = vm.$options
+            const handlers = options.render && options.render._withStripped
+                ? getHandler
+                : hasHandler
+            vm._renderProxy = new Proxy(vm, handlers)
+        } else {
+            vm._renderProxy = vm
+        }
+    }
+}
+
+
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(0)))
+
+/***/ }),
+/* 24 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/**
+ * Created by zj on 2017/12/14.
+ */
+class VNode {
+    // tag: string | void;
+    // data: VNodeData | void;
+    // children: ?Array<VNode>;
+    // text: string | void;
+    // elm: Node | void;
+    // ns: string | void;
+    // context: Component | void; // rendered in this component's scope
+    // key: string | number | void;
+    // componentOptions: VNodeComponentOptions | void;
+    // componentInstance: Component | void; // component instance
+    // parent: VNode | void; // component placeholder node
+    //
+    // // strictly internal
+    // raw: boolean; // contains raw HTML? (server only)
+    // isStatic: boolean; // hoisted static node
+    // isRootInsert: boolean; // necessary for enter transition check
+    // isComment: boolean; // empty comment placeholder?
+    // isCloned: boolean; // is a cloned node?
+    // isOnce: boolean; // is a v-once node?
+    // asyncFactory: Function | void; // async component factory function
+    // asyncMeta: Object | void;
+    // isAsyncPlaceholder: boolean;
+    // ssrContext: Object | void;
+    // fnContext: Component | void; // real context vm for functional nodes
+    // fnOptions: ?ComponentOptions; // for SSR caching
+    // fnScopeId: ?string; // functioanl scope id support
+
+    constructor(tag,
+                data,
+                children,
+                text,
+                elm,
+                context,
+                componentOptions,
+                asyncFactory) {
+        this.tag = tag
+        this.data = data
+        this.children = children
+        this.text = text
+        this.elm = elm
+        this.ns = undefined
+        this.context = context
+        this.fnContext = undefined
+        this.fnOptions = undefined
+        this.fnScopeId = undefined
+        this.key = data && data.key
+        this.componentOptions = componentOptions
+        this.componentInstance = undefined
+        this.parent = undefined
+        this.raw = false
+        this.isStatic = false
+        this.isRootInsert = true
+        this.isComment = false
+        this.isCloned = false
+        this.isOnce = false
+        this.asyncFactory = asyncFactory
+        this.asyncMeta = undefined
+        this.isAsyncPlaceholder = false
+    }
+
+// DEPRECATED: alias for componentInstance for backwards compat.
+    /* istanbul ignore next */
+    get child() {
+        return this.componentInstance
+    }
+}
+/* harmony export (immutable) */ __webpack_exports__["b"] = VNode;
+
+
+const createEmptyVNode = (text) => {
+    const node = new VNode()
+    node.text = text
+    node.isComment = true
+    return node
+}
+/* harmony export (immutable) */ __webpack_exports__["a"] = createEmptyVNode;
+
+
+/***/ }),
+/* 25 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (immutable) */ __webpack_exports__["a"] = createPatchFunction;
+/**
+ * Created by zj on 2017/12/14.
+ */
+function createPatchFunction (backend) {
+    return function patch() {
+
+    }
+}
+
+/***/ }),
+/* 26 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__core_vdom_patch__ = __webpack_require__(25);
+/**
+ * Created by zj on 2017/12/14.
+ */
+
+const patch = Object(__WEBPACK_IMPORTED_MODULE_0__core_vdom_patch__["a" /* createPatchFunction */])()
+/* harmony export (immutable) */ __webpack_exports__["a"] = patch;
+
 
 /***/ })
 /******/ ]);

@@ -3,6 +3,8 @@
  */
 import Vue from '../web/runtime/index'
 import {query} from '../web/util/index'
+import config from '../../core/config'
+import  {mark} from '../../core/util/perf'
 const mount = Vue.prototype.$mount
 Vue.prototype.$mount = function (
     el,
@@ -68,6 +70,20 @@ Vue.prototype.$mount = function (
         }
     }
     return mount.call(this, el, hydrating)
+}
+
+/**
+ * Get outerHTML of elements, taking care
+ * of SVG elements in IE as well.
+ */
+function getOuterHTML (el){
+    if (el.outerHTML) {
+        return el.outerHTML
+    } else {
+        const container = document.createElement('div')
+        container.appendChild(el.cloneNode(true))
+        return container.innerHTML
+    }
 }
 window.Vue = Vue;
 export default Vue
