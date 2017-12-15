@@ -1,6 +1,7 @@
 /**
  * Created by zj on 2017/12/11.
  */
+export const SSR_ATTR = 'data-server-rendered'
 export const ASSET_TYPES = [
     'component',
     'directive',

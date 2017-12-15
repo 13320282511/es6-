@@ -4,7 +4,7 @@
 import {stateMixin} from './state'
 import {initMixin} from './init'
 import {renderMixin} from './render'
-import {lifecycleMixin} from './lifescycle'
+import {lifecycleMixin} from './lifecycle'
 function  Vue(options) {
     this._init(options);
 }

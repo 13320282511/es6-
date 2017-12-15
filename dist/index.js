@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 9);
+/******/ 	return __webpack_require__(__webpack_require__.s = 16);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -258,9 +258,147 @@ process.umask = function() { return 0; };
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__shared_constants__ = __webpack_require__(4);
 /**
  * Created by zj on 2017/12/11.
  */
+
+/* harmony default export */ __webpack_exports__["a"] = ({
+    optionMergeStrategies: Object.create(null),
+    _lifecycleHooks: __WEBPACK_IMPORTED_MODULE_0__shared_constants__["b" /* LIFECYCLE_HOOKS */],
+    /**
+     * Whether to record perf
+     */
+    performance: false,
+    /**
+     * Custom user key aliases for v-on
+     */
+    keyCodes: Object.create(null),
+    /**
+     * Ignore certain custom elements
+     */
+    ignoredElements: [],
+    /**
+     * Check if a tag is an unknown element.
+     * Platform-dependent.
+     */
+    isUnknownElement: () => false
+});
+
+/***/ }),
+/* 2 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__shared_util__ = __webpack_require__(3);
+/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_0__shared_util__["a"]; });
+/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "c", function() { return __WEBPACK_IMPORTED_MODULE_0__shared_util__["d"]; });
+/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "d", function() { return __WEBPACK_IMPORTED_MODULE_0__shared_util__["f"]; });
+/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "e", function() { return __WEBPACK_IMPORTED_MODULE_0__shared_util__["g"]; });
+/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "f", function() { return __WEBPACK_IMPORTED_MODULE_0__shared_util__["h"]; });
+/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "g", function() { return __WEBPACK_IMPORTED_MODULE_0__shared_util__["j"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__env__ = __webpack_require__(10);
+/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "b", function() { return __WEBPACK_IMPORTED_MODULE_1__env__["a"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__lang__ = __webpack_require__(5);
+/* unused harmony namespace reexport */
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__perf__ = __webpack_require__(11);
+/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "h", function() { return __WEBPACK_IMPORTED_MODULE_3__perf__["a"]; });
+/**
+ * Created by zj on 2017/12/13.
+ */
+
+
+
+
+
+/***/ }),
+/* 3 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (immutable) */ __webpack_exports__["b"] = extend;
+/* harmony export (immutable) */ __webpack_exports__["c"] = hasOwn;
+/* harmony export (immutable) */ __webpack_exports__["h"] = isUndef;
+/* harmony export (immutable) */ __webpack_exports__["d"] = isDef;
+/* harmony export (immutable) */ __webpack_exports__["e"] = isObject;
+/* harmony export (immutable) */ __webpack_exports__["g"] = isTrue;
+/* harmony export (immutable) */ __webpack_exports__["f"] = isPrimitive;
+/* harmony export (immutable) */ __webpack_exports__["i"] = isValidArrayIndex;
+/* harmony export (immutable) */ __webpack_exports__["j"] = makeMap;
+/**
+ * Created by zj on 2017/12/11.
+ */
+function extend(to, _from) {
+    for (var key in _from) {
+        to[key] = _from[key];
+    }
+    return to;
+}
+
+const hasOwnProperty = Object.prototype.hasOwnProperty
+function hasOwn(obj, key) {
+    return hasOwnProperty.call(obj, key)
+}
+// these helpers produces better vm code in JS engines due to their
+// explicitness and function inlining
+function isUndef (v){
+    return v === undefined || v === null
+}
+
+function isDef (v) {
+    return v !== undefined && v !== null
+}
+function isObject(obj) {
+    return obj !== null && typeof obj === 'object'
+}
+function isTrue (v){
+    return v === true
+}
+/**
+ * Check if value is primitive
+ */
+function isPrimitive (value){
+    return typeof value === 'string' || typeof value === 'number'
+}
+/**
+ * Check if val is a valid array index.
+ */
+function isValidArrayIndex(val) {
+    //暂时不清楚为什么还要String(val)
+    const n = parseFloat(String(val))
+    //如果n不是小数的正整数  而且必须是有限数字  NAN Infinity和-Infinity都不行
+    return n >= 0 && Math.floor(n) === n && isFinite(val)
+}
+const emptyObject = Object.freeze({})
+/* harmony export (immutable) */ __webpack_exports__["a"] = emptyObject;
+
+/**
+ * Make a map and return a function for checking if a key
+ * is in that map.
+ */
+function makeMap(str,
+                        expectsLowerCase) {
+    const map = Object.create(null)
+    const list = str.split(',')
+    for (let i = 0; i < list.length; i++) {
+        map[list[i]] = true
+    }
+    return expectsLowerCase
+        ? val => map[val.toLowerCase()]
+        : val => map[val]
+}
+
+/***/ }),
+/* 4 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/**
+ * Created by zj on 2017/12/11.
+ */
+const SSR_ATTR = 'data-server-rendered'
+/* harmony export (immutable) */ __webpack_exports__["c"] = SSR_ATTR;
+
 const ASSET_TYPES = [
     'component',
     'directive',
@@ -285,7 +423,7 @@ const LIFECYCLE_HOOKS = [
 
 
 /***/ }),
-/* 2 */
+/* 5 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -300,7 +438,7 @@ function isReserved (str){
 }
 
 function def (obj, key, val, enumerable) {
-    console.log('obj',obj)
+    console.log('obj def',obj)
     Object.defineProperty(obj, key, {
         value: val,
         enumerable: !!enumerable,
@@ -310,11 +448,11 @@ function def (obj, key, val, enumerable) {
 }
 
 /***/ }),
-/* 3 */
+/* 6 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(process) {/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__dep__ = __webpack_require__(15);
+/* WEBPACK VAR INJECTION */(function(process) {/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__dep__ = __webpack_require__(9);
 /**
  * Created by zj on 2017/12/8.
  */
@@ -429,38 +567,239 @@ class Watcher {
 /* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(0)))
 
 /***/ }),
-/* 4 */
+/* 7 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__shared_constants__ = __webpack_require__(1);
+/* WEBPACK VAR INJECTION */(function(process) {/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return activeInstance; });
+/* harmony export (immutable) */ __webpack_exports__["c"] = initLifecycle;
+/* harmony export (immutable) */ __webpack_exports__["e"] = mountComponent;
+/* harmony export (immutable) */ __webpack_exports__["d"] = lifecycleMixin;
+/* harmony export (immutable) */ __webpack_exports__["b"] = callHook;
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__observer_watcher__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__vdom_patch__ = __webpack_require__(12);
 /**
- * Created by zj on 2017/12/11.
+ * Created by zj on 2017/12/13.
  */
 
-/* harmony default export */ __webpack_exports__["a"] = ({
-    optionMergeStrategies: Object.create(null),
-    _lifecycleHooks: __WEBPACK_IMPORTED_MODULE_0__shared_constants__["b" /* LIFECYCLE_HOOKS */],
-    /**
-     * Whether to record perf
-     */
-    performance: false,
-    /**
-     * Custom user key aliases for v-on
-     */
-    keyCodes: Object.create(null)
-});
+
+let activeInstance = null;
+function initLifecycle (vm) {
+    const options = vm.$options
+
+    // locate first non-abstract parent
+    let parent = options.parent
+    if (parent && !options.abstract) {
+        while (parent.$options.abstract && parent.$parent) {
+            parent = parent.$parent
+        }
+        parent.$children.push(vm)
+    }
+
+    vm.$parent = parent
+    vm.$root = parent ? parent.$root : vm
+
+    vm.$children = []
+    vm.$refs = {}
+
+    vm._watcher = null
+    vm._inactive = null
+    vm._directInactive = false
+    vm._isMounted = false
+    vm._isDestroyed = false
+    vm._isBeingDestroyed = false
+}
+function mountComponent (
+    vm,
+    el,
+    hydrating
+){
+    vm.$el = el
+    if (!vm.$options.render) {
+        vm.$options.render = createEmptyVNode
+        if (process.env.NODE_ENV !== 'production') {
+            /* istanbul ignore if */
+            if ((vm.$options.template && vm.$options.template.charAt(0) !== '#') ||
+                vm.$options.el || el) {
+                warn(
+                    'You are using the runtime-only build of Vue where the template ' +
+                    'compiler is not available. Either pre-compile the templates into ' +
+                    'render functions, or use the compiler-included build.',
+                    vm
+                )
+            } else {
+                warn(
+                    'Failed to mount component: template or render function not defined.',
+                    vm
+                )
+            }
+        }
+    }
+   // callHook(vm, 'beforeMount')
+
+    let updateComponent
+    /* istanbul ignore if */
+    // if (process.env.NODE_ENV !== 'production' && config.performance && mark) {
+    //     updateComponent = () => {
+    //         const name = vm._name
+    //         const id = vm._uid
+    //         const startTag = `vue-perf-start:${id}`
+    //         const endTag = `vue-perf-end:${id}`
+    //
+    //         mark(startTag)
+    //         const vnode = vm._render()
+    //         mark(endTag)
+    //         measure(`vue ${name} render`, startTag, endTag)
+    //
+    //         mark(startTag)
+    //         vm._update(vnode, hydrating)
+    //         mark(endTag)
+    //         measure(`vue ${name} patch`, startTag, endTag)
+    //     }
+    // } else {
+        updateComponent = () => {
+            vm._update(vm._render(), hydrating)
+        }
+    // }
+
+    // we set this to vm._watcher inside the watcher's constructor
+    // since the watcher's initial patch may call $forceUpdate (e.g. inside child
+    // component's mounted hook), which relies on vm._watcher being already defined
+    let noop = false
+    new __WEBPACK_IMPORTED_MODULE_0__observer_watcher__["a" /* default */](vm, updateComponent, noop, null, true /* isRenderWatcher */)
+    hydrating = false
+
+    // manually mounted instance, call mounted on self
+    // mounted is called for render-created child components in its inserted hook
+    if (vm.$vnode == null) {
+        vm._isMounted = true
+        //callHook(vm, 'mounted')
+    }
+    return vm
+}
+function lifecycleMixin (Vue) {
+    Vue.prototype._update = function (vnode, hydrating) {
+        const vm= this
+        if (vm._isMounted) {
+            callHook(vm, 'beforeUpdate')
+        }
+        const prevEl = vm.$el
+        const prevVnode = vm._vnode
+        const prevActiveInstance = activeInstance
+        activeInstance = vm
+        vm._vnode = vnode
+        // Vue.prototype.__patch__ is injected in entry points
+        // based on the rendering backend used.
+        console.log('prevVnode',prevVnode)
+        if (!prevVnode) {
+            // initial render
+            console.log('vm.$el',vm.$el)
+            console.log('vnode',vnode)
+            vm.$el = vm.__patch__(
+                vm.$el, vnode, hydrating, false /* removeOnly */,
+                vm.$options._parentElm,
+                vm.$options._refElm
+            )
+            // no need for the ref nodes after initial patch
+            // this prevents keeping a detached DOM tree in memory (#5851)
+            vm.$options._parentElm = vm.$options._refElm = null
+        } else {
+            // updates
+            vm.$el = vm.__patch__(prevVnode, vnode)
+        }
+        activeInstance = prevActiveInstance
+        // update __vue__ reference
+        if (prevEl) {
+            prevEl.__vue__ = null
+        }
+        if (vm.$el) {
+            vm.$el.__vue__ = vm
+        }
+        // if parent is an HOC, update its $el as well
+        if (vm.$vnode && vm.$parent && vm.$vnode === vm.$parent._vnode) {
+            vm.$parent.$el = vm.$el
+        }
+        // updated hook is called by the scheduler to ensure that children are
+        // updated in a parent's updated hook.
+    }
+
+    Vue.prototype.$forceUpdate = function () {
+        const vm = this
+        if (vm._watcher) {
+            vm._watcher.update()
+        }
+    }
+
+    Vue.prototype.$destroy = function () {
+        const vm = this
+        if (vm._isBeingDestroyed) {
+            return
+        }
+        callHook(vm, 'beforeDestroy')
+        vm._isBeingDestroyed = true
+        // remove self from parent
+        const parent = vm.$parent
+        if (parent && !parent._isBeingDestroyed && !vm.$options.abstract) {
+            remove(parent.$children, vm)
+        }
+        // teardown watchers
+        if (vm._watcher) {
+            vm._watcher.teardown()
+        }
+        let i = vm._watchers.length
+        while (i--) {
+            vm._watchers[i].teardown()
+        }
+        // remove reference from data ob
+        // frozen object may not have observer.
+        if (vm._data.__ob__) {
+            vm._data.__ob__.vmCount--
+        }
+        // call the last hook...
+        vm._isDestroyed = true
+        // invoke destroy hooks on current rendered tree
+        vm.__patch__(vm._vnode, null)
+        // fire destroyed hook
+        callHook(vm, 'destroyed')
+        // turn off all instance listeners.
+        vm.$off()
+        // remove __vue__ reference
+        if (vm.$el) {
+            vm.$el.__vue__ = null
+        }
+        // release circular reference (#6759)
+        if (vm.$vnode) {
+            vm.$vnode.parent = null
+        }
+    }
+}
+function callHook (vm, hook) {
+    const handlers = vm.$options[hook]
+    if (handlers) {
+        for (let i = 0, j = handlers.length; i < j; i++) {
+            try {
+                handlers[i].call(vm)
+            } catch (e) {
+                handleError(e, vm, `${hook} hook`)
+            }
+        }
+    }
+    if (vm._hasHookEvent) {
+        vm.$emit('hook:' + hook)
+    }
+}
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(0)))
 
 /***/ }),
-/* 5 */
+/* 8 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(process) {/* unused harmony export proxy */
 /* harmony export (immutable) */ __webpack_exports__["a"] = initState;
 /* harmony export (immutable) */ __webpack_exports__["b"] = stateMixin;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__util_lang__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__observer_index__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__util_lang__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__observer_index__ = __webpack_require__(21);
 /**
  * Created by zj on 2017/12/12.
  */
@@ -603,286 +942,533 @@ function stateMixin(Vue) {
 /* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(0)))
 
 /***/ }),
-/* 6 */
+/* 9 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (immutable) */ __webpack_exports__["b"] = extend;
-/* harmony export (immutable) */ __webpack_exports__["c"] = hasOwn;
-/* harmony export (immutable) */ __webpack_exports__["d"] = isObject;
-/* harmony export (immutable) */ __webpack_exports__["e"] = isValidArrayIndex;
-/* harmony export (immutable) */ __webpack_exports__["f"] = makeMap;
+/* harmony export (immutable) */ __webpack_exports__["c"] = pushTarget;
+/* harmony export (immutable) */ __webpack_exports__["b"] = popTarget;
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__watcher__ = __webpack_require__(6);
 /**
- * Created by zj on 2017/12/11.
+ * Created by zj on 2017/12/8.
  */
-function extend(to, _from) {
-    for (var key in _from) {
-        to[key] = _from[key];
+
+class Dep {
+    constructor() {
+        this.id = 1;
+        this.subs = [];
     }
-    return to;
-}
-
-const hasOwnProperty = Object.prototype.hasOwnProperty
-function hasOwn(obj, key) {
-    return hasOwnProperty.call(obj, key)
-}
-
-function isObject(obj) {
-    return obj !== null && typeof obj === 'object'
-}
-
-/**
- * Check if val is a valid array index.
- */
-function isValidArrayIndex(val) {
-    //暂时不清楚为什么还要String(val)
-    const n = parseFloat(String(val))
-    //如果n不是小数的正整数  而且必须是有限数字  NAN Infinity和-Infinity都不行
-    return n >= 0 && Math.floor(n) === n && isFinite(val)
-}
-const emptyObject = Object.freeze({})
-/* harmony export (immutable) */ __webpack_exports__["a"] = emptyObject;
-
-/**
- * Make a map and return a function for checking if a key
- * is in that map.
- */
-function makeMap(str,
-                        expectsLowerCase) {
-    const map = Object.create(null)
-    const list = str.split(',')
-    for (let i = 0; i < list.length; i++) {
-        map[list[i]] = true
+    addSub(watcher) {
+        this.subs.push(watcher);
     }
-    return expectsLowerCase
-        ? val => map[val.toLowerCase()]
-        : val => map[val]
+    notify() {
+        const subs = this.subs.slice();
+        for(let i = 0;i<subs.length;i++) {
+            subs[i].update();
+        }
+    }
 }
+/* harmony export (immutable) */ __webpack_exports__["a"] = Dep;
+
+Dep.target = null;
+const targetStack = []
+
+function pushTarget (_target) {
+    if (Dep.target) targetStack.push(Dep.target)
+    Dep.target = _target
+}
+function popTarget () {
+    Dep.target = targetStack.pop()
+}
+
 
 /***/ }),
-/* 7 */
+/* 10 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(process) {/* unused harmony export activeInstance */
-/* harmony export (immutable) */ __webpack_exports__["b"] = initLifecycle;
-/* harmony export (immutable) */ __webpack_exports__["d"] = mountComponent;
-/* harmony export (immutable) */ __webpack_exports__["c"] = lifecycleMixin;
-/* harmony export (immutable) */ __webpack_exports__["a"] = callHook;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__observer_watcher__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__vdom_patch__ = __webpack_require__(25);
 /**
  * Created by zj on 2017/12/13.
  */
+const inBrowser = typeof window !== 'undefined'
+/* harmony export (immutable) */ __webpack_exports__["a"] = inBrowser;
 
 
-console.log('createPatchFunction',__WEBPACK_IMPORTED_MODULE_1__vdom_patch__["a" /* createPatchFunction */])
-let activeInstance = null;
-function initLifecycle (vm) {
-    const options = vm.$options
+/***/ }),
+/* 11 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-    // locate first non-abstract parent
-    let parent = options.parent
-    if (parent && !options.abstract) {
-        while (parent.$options.abstract && parent.$parent) {
-            parent = parent.$parent
-        }
-        parent.$children.push(vm)
-    }
+"use strict";
+/* WEBPACK VAR INJECTION */(function(process) {/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return mark; });
+/* unused harmony export measure */
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__env__ = __webpack_require__(10);
+/**
+ * Created by zj on 2017/12/14.
+ */
 
-    vm.$parent = parent
-    vm.$root = parent ? parent.$root : vm
+let mark
+let measure
 
-    vm.$children = []
-    vm.$refs = {}
-
-    vm._watcher = null
-    vm._inactive = null
-    vm._directInactive = false
-    vm._isMounted = false
-    vm._isDestroyed = false
-    vm._isBeingDestroyed = false
-}
-function mountComponent (
-    vm,
-    el,
-    hydrating
-){
-    vm.$el = el
-    if (!vm.$options.render) {
-        vm.$options.render = createEmptyVNode
-        if (process.env.NODE_ENV !== 'production') {
-            /* istanbul ignore if */
-            if ((vm.$options.template && vm.$options.template.charAt(0) !== '#') ||
-                vm.$options.el || el) {
-                warn(
-                    'You are using the runtime-only build of Vue where the template ' +
-                    'compiler is not available. Either pre-compile the templates into ' +
-                    'render functions, or use the compiler-included build.',
-                    vm
-                )
-            } else {
-                warn(
-                    'Failed to mount component: template or render function not defined.',
-                    vm
-                )
-            }
-        }
-    }
-   // callHook(vm, 'beforeMount')
-
-    let updateComponent
+if (process.env.NODE_ENV !== 'production') {
+    const perf = __WEBPACK_IMPORTED_MODULE_0__env__["a" /* inBrowser */] && window.performance
     /* istanbul ignore if */
-    // if (process.env.NODE_ENV !== 'production' && config.performance && mark) {
-    //     updateComponent = () => {
-    //         const name = vm._name
-    //         const id = vm._uid
-    //         const startTag = `vue-perf-start:${id}`
-    //         const endTag = `vue-perf-end:${id}`
-    //
-    //         mark(startTag)
-    //         const vnode = vm._render()
-    //         mark(endTag)
-    //         measure(`vue ${name} render`, startTag, endTag)
-    //
-    //         mark(startTag)
-    //         vm._update(vnode, hydrating)
-    //         mark(endTag)
-    //         measure(`vue ${name} patch`, startTag, endTag)
-    //     }
-    // } else {
-        updateComponent = () => {
-            vm._update(vm._render(), hydrating)
+    if (
+        perf &&
+        perf.mark &&
+        perf.measure &&
+        perf.clearMarks &&
+        perf.clearMeasures
+    ) {
+        mark = tag => perf.mark(tag)
+        measure = (name, startTag, endTag) => {
+            perf.measure(name, startTag, endTag)
+            perf.clearMarks(startTag)
+            perf.clearMarks(endTag)
+            perf.clearMeasures(name)
         }
-    // }
-
-    // we set this to vm._watcher inside the watcher's constructor
-    // since the watcher's initial patch may call $forceUpdate (e.g. inside child
-    // component's mounted hook), which relies on vm._watcher being already defined
-    let noop = false
-    new __WEBPACK_IMPORTED_MODULE_0__observer_watcher__["a" /* default */](vm, updateComponent, noop, null, true /* isRenderWatcher */)
-    hydrating = false
-
-    // manually mounted instance, call mounted on self
-    // mounted is called for render-created child components in its inserted hook
-    if (vm.$vnode == null) {
-        vm._isMounted = true
-        //callHook(vm, 'mounted')
-    }
-    return vm
-}
-function lifecycleMixin (Vue) {
-    Vue.prototype._update = function (vnode, hydrating) {
-        const vm= this
-        if (vm._isMounted) {
-            callHook(vm, 'beforeUpdate')
-        }
-        const prevEl = vm.$el
-        const prevVnode = vm._vnode
-        const prevActiveInstance = activeInstance
-        activeInstance = vm
-        vm._vnode = vnode
-        // Vue.prototype.__patch__ is injected in entry points
-        // based on the rendering backend used.
-        if (!prevVnode) {
-            // initial render
-            vm.$el = vm.__patch__(
-                vm.$el, vnode, hydrating, false /* removeOnly */,
-                vm.$options._parentElm,
-                vm.$options._refElm
-            )
-            // no need for the ref nodes after initial patch
-            // this prevents keeping a detached DOM tree in memory (#5851)
-            vm.$options._parentElm = vm.$options._refElm = null
-        } else {
-            // updates
-            vm.$el = vm.__patch__(prevVnode, vnode)
-        }
-        activeInstance = prevActiveInstance
-        // update __vue__ reference
-        if (prevEl) {
-            prevEl.__vue__ = null
-        }
-        if (vm.$el) {
-            vm.$el.__vue__ = vm
-        }
-        // if parent is an HOC, update its $el as well
-        if (vm.$vnode && vm.$parent && vm.$vnode === vm.$parent._vnode) {
-            vm.$parent.$el = vm.$el
-        }
-        // updated hook is called by the scheduler to ensure that children are
-        // updated in a parent's updated hook.
-    }
-
-    Vue.prototype.$forceUpdate = function () {
-        const vm = this
-        if (vm._watcher) {
-            vm._watcher.update()
-        }
-    }
-
-    Vue.prototype.$destroy = function () {
-        const vm = this
-        if (vm._isBeingDestroyed) {
-            return
-        }
-        callHook(vm, 'beforeDestroy')
-        vm._isBeingDestroyed = true
-        // remove self from parent
-        const parent = vm.$parent
-        if (parent && !parent._isBeingDestroyed && !vm.$options.abstract) {
-            remove(parent.$children, vm)
-        }
-        // teardown watchers
-        if (vm._watcher) {
-            vm._watcher.teardown()
-        }
-        let i = vm._watchers.length
-        while (i--) {
-            vm._watchers[i].teardown()
-        }
-        // remove reference from data ob
-        // frozen object may not have observer.
-        if (vm._data.__ob__) {
-            vm._data.__ob__.vmCount--
-        }
-        // call the last hook...
-        vm._isDestroyed = true
-        // invoke destroy hooks on current rendered tree
-        vm.__patch__(vm._vnode, null)
-        // fire destroyed hook
-        callHook(vm, 'destroyed')
-        // turn off all instance listeners.
-        vm.$off()
-        // remove __vue__ reference
-        if (vm.$el) {
-            vm.$el.__vue__ = null
-        }
-        // release circular reference (#6759)
-        if (vm.$vnode) {
-            vm.$vnode.parent = null
-        }
-    }
-}
-function callHook (vm, hook) {
-    const handlers = vm.$options[hook]
-    if (handlers) {
-        for (let i = 0, j = handlers.length; i < j; i++) {
-            try {
-                handlers[i].call(vm)
-            } catch (e) {
-                handleError(e, vm, `${hook} hook`)
-            }
-        }
-    }
-    if (vm._hasHookEvent) {
-        vm.$emit('hook:' + hook)
     }
 }
 /* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(0)))
 
 /***/ }),
-/* 8 */
+/* 12 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(process) {/* harmony export (immutable) */ __webpack_exports__["a"] = createPatchFunction;
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__core_util__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__shared_constants__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__vdom_vnode__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__config__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__core_instance_lifecycle__ = __webpack_require__(7);
+/**
+ * Created by zj on 2017/12/14.
+ */
+
+
+
+
+
+function createPatchFunction(backend) {
+    const nodeOps = backend;
+
+    function emptyNodeAt(elm) {
+        return new __WEBPACK_IMPORTED_MODULE_2__vdom_vnode__["b" /* default */](nodeOps.tagName(elm).toLowerCase(), {}, [], undefined, elm)
+    }
+    let inPre = 0
+    /*创建一个节点*/
+    function createElm(vnode, insertedVnodeQueue, parentElm, refElm, nested) {
+        /*insertedVnodeQueue为空数组[]的时候isRootInsert标志为true*/
+        vnode.isRootInsert = !nested // for transition enter check
+        /*创建一个组件节点*/
+        if (createComponent(vnode, insertedVnodeQueue, parentElm, refElm)) {
+            return
+        }
+
+        const data = vnode.data
+        const children = vnode.children
+        const tag = vnode.tag
+        if (Object(__WEBPACK_IMPORTED_MODULE_0__core_util__["c" /* isDef */])(tag)) {
+            if (process.env.NODE_ENV !== 'production') {
+                if (data && data.pre) {
+                    inPre++
+                }
+                if (
+                    !inPre &&
+                    !vnode.ns &&
+                    !(__WEBPACK_IMPORTED_MODULE_3__config__["a" /* default */].ignoredElements.length && __WEBPACK_IMPORTED_MODULE_3__config__["a" /* default */].ignoredElements.indexOf(tag) > -1) &&
+                    __WEBPACK_IMPORTED_MODULE_3__config__["a" /* default */].isUnknownElement(tag)
+                ) {
+                    warn(
+                        'Unknown custom element: <' + tag + '> - did you ' +
+                        'register the component correctly? For recursive components, ' +
+                        'make sure to provide the "name" option.',
+                        vnode.context
+                    )
+                }
+            }
+            vnode.elm = vnode.ns
+                ? nodeOps.createElementNS(vnode.ns, tag)
+                : nodeOps.createElement(tag, vnode)
+            setScope(vnode)
+
+            /* istanbul ignore if */
+            let __WEEX__ = false;
+            if (__WEEX__) {
+                // in Weex, the default insertion order is parent-first.
+                // List items can be optimized to use children-first insertion
+                // with append="tree".
+                const appendAsTree = Object(__WEBPACK_IMPORTED_MODULE_0__core_util__["c" /* isDef */])(data) && Object(__WEBPACK_IMPORTED_MODULE_0__core_util__["e" /* isTrue */])(data.appendAsTree)
+                if (!appendAsTree) {
+                    if (Object(__WEBPACK_IMPORTED_MODULE_0__core_util__["c" /* isDef */])(data)) {
+                        invokeCreateHooks(vnode, insertedVnodeQueue)
+                    }
+                    insert(parentElm, vnode.elm, refElm)
+                }
+                createChildren(vnode, children, insertedVnodeQueue)
+                if (appendAsTree) {
+                    if (Object(__WEBPACK_IMPORTED_MODULE_0__core_util__["c" /* isDef */])(data)) {
+                        invokeCreateHooks(vnode, insertedVnodeQueue)
+                    }
+                    insert(parentElm, vnode.elm, refElm)
+                }
+            } else {
+                createChildren(vnode, children, insertedVnodeQueue)
+                if (Object(__WEBPACK_IMPORTED_MODULE_0__core_util__["c" /* isDef */])(data)) {
+                    //invokeCreateHooks(vnode, insertedVnodeQueue)
+                }
+                insert(parentElm, vnode.elm, refElm)
+            }
+
+            if (process.env.NODE_ENV !== 'production' && data && data.pre) {
+                inPre--
+            }
+        } else if (Object(__WEBPACK_IMPORTED_MODULE_0__core_util__["e" /* isTrue */])(vnode.isComment)) {
+            vnode.elm = nodeOps.createComment(vnode.text)
+            insert(parentElm, vnode.elm, refElm)
+        } else {
+            vnode.elm = nodeOps.createTextNode(vnode.text)
+            insert(parentElm, vnode.elm, refElm)
+        }
+    }
+    /*创建一个组件*/
+    function createComponent (vnode, insertedVnodeQueue, parentElm, refElm) {
+        let i = vnode.data
+        if (Object(__WEBPACK_IMPORTED_MODULE_0__core_util__["c" /* isDef */])(i)) {
+            const isReactivated = Object(__WEBPACK_IMPORTED_MODULE_0__core_util__["c" /* isDef */])(vnode.componentInstance) && i.keepAlive
+            if (Object(__WEBPACK_IMPORTED_MODULE_0__core_util__["c" /* isDef */])(i = i.hook) && Object(__WEBPACK_IMPORTED_MODULE_0__core_util__["c" /* isDef */])(i = i.init)) {
+                i(vnode, false /* hydrating */, parentElm, refElm)
+            }
+            // after calling the init hook, if the vnode is a child component
+            // it should've created a child instance and mounted it. the child
+            // component also has set the placeholder vnode's elm.
+            // in that case we can just return the element and be done.
+            /*
+             在调用了init钩子以后，如果VNode是一个子组件，它应该已经创建了一个子组件实例并挂载它。
+             子组件也应该设置了一个VNode占位符，我们直接返回组件实例即可。
+             意思就是如果已经存在组件实例，则不需要重新创建一个新的，我们要做的就是初始化组件以及激活组件即可，还是用原来的组件实例。
+             */
+            if (Object(__WEBPACK_IMPORTED_MODULE_0__core_util__["c" /* isDef */])(vnode.componentInstance)) {
+                /*初始化组件*/
+                initComponent(vnode, insertedVnodeQueue)
+                if (Object(__WEBPACK_IMPORTED_MODULE_0__core_util__["e" /* isTrue */])(isReactivated)) {
+                    reactivateComponent(vnode, insertedVnodeQueue, parentElm, refElm)
+                }
+                return true
+            }
+        }
+    }
+    // set scope id attribute for scoped CSS.
+    // this is implemented as a special case to avoid the overhead
+    // of going through the normal attribute patching process.
+    /*为scoped CSS 设置scoped id*/
+    function setScope (vnode) {
+        let i
+        let ancestor = vnode
+        while (ancestor) {
+            if (Object(__WEBPACK_IMPORTED_MODULE_0__core_util__["c" /* isDef */])(i = ancestor.context) && Object(__WEBPACK_IMPORTED_MODULE_0__core_util__["c" /* isDef */])(i = i.$options._scopeId)) {
+                nodeOps.setAttribute(vnode.elm, i, '')
+            }
+            ancestor = ancestor.parent
+        }
+        // for slot content they should also get the scopeId from the host instance.
+        if (Object(__WEBPACK_IMPORTED_MODULE_0__core_util__["c" /* isDef */])(i = __WEBPACK_IMPORTED_MODULE_4__core_instance_lifecycle__["a" /* activeInstance */]) &&
+            i !== vnode.context &&
+            Object(__WEBPACK_IMPORTED_MODULE_0__core_util__["c" /* isDef */])(i = i.$options._scopeId)) {
+            nodeOps.setAttribute(vnode.elm, i, '')
+        }
+    }
+    function createChildren (vnode, children, insertedVnodeQueue) {
+        if (Array.isArray(children)) {
+            for (let i = 0; i < children.length; ++i) {
+                createElm(children[i], insertedVnodeQueue, vnode.elm, null, true)
+            }
+        } else if (Object(__WEBPACK_IMPORTED_MODULE_0__core_util__["d" /* isPrimitive */])(vnode.text)) {
+            nodeOps.appendChild(vnode.elm, nodeOps.createTextNode(vnode.text))
+        }
+    }
+    /*调用创建的钩子函数*/
+    function invokeCreateHooks (vnode, insertedVnodeQueue) {
+        /*循环调用modules中的create钩子*/
+        for (let i = 0; i < cbs.create.length; ++i) {
+            cbs.create[i](emptyNode, vnode)
+        }
+        i = vnode.data.hook // Reuse variable
+        if (Object(__WEBPACK_IMPORTED_MODULE_0__core_util__["c" /* isDef */])(i)) {
+            if (Object(__WEBPACK_IMPORTED_MODULE_0__core_util__["c" /* isDef */])(i.create)) i.create(emptyNode, vnode)
+            if (Object(__WEBPACK_IMPORTED_MODULE_0__core_util__["c" /* isDef */])(i.insert)) insertedVnodeQueue.push(vnode)
+        }
+    }
+    function insert (parent, elm, ref) {
+        if (Object(__WEBPACK_IMPORTED_MODULE_0__core_util__["c" /* isDef */])(parent)) {
+            if (Object(__WEBPACK_IMPORTED_MODULE_0__core_util__["c" /* isDef */])(ref)) {
+                if (ref.parentNode === parent) {
+                    nodeOps.insertBefore(parent, elm, ref)
+                }
+            } else {
+                nodeOps.appendChild(parent, elm)
+            }
+        }
+    }
+    return function patch(oldVnode, vnode, hydrating, removeOnly, parentElm, refElm) {
+        if (Object(__WEBPACK_IMPORTED_MODULE_0__core_util__["f" /* isUndef */])(vnode)) {
+            return
+        }
+        const insertedVnodeQueue = []
+        if (Object(__WEBPACK_IMPORTED_MODULE_0__core_util__["f" /* isUndef */])(oldVnode)) {
+
+        } else {
+            const isRealElement = Object(__WEBPACK_IMPORTED_MODULE_0__core_util__["c" /* isDef */])(oldVnode.nodeType);
+            if (!isRealElement) {
+
+            } else {
+                if (isRealElement) {
+                    if (oldVnode.nodeType == 1) {
+                        oldVnode.removeAttribute(__WEBPACK_IMPORTED_MODULE_1__shared_constants__["c" /* SSR_ATTR */]);
+                        hydrating = true
+                    }
+                    if (Object(__WEBPACK_IMPORTED_MODULE_0__core_util__["e" /* isTrue */])(hydrating)) {
+
+                    }
+                    oldVnode = emptyNodeAt(oldVnode)
+                }
+                const oldElm = oldVnode.elm
+                const parentElm = nodeOps.parentNode(oldElm)
+                console.log('parentElm',parentElm)
+                createElm(
+                    vnode,
+                    insertedVnodeQueue,
+                    // extremely rare edge case: do not insert if old element is in a
+                    // leaving transition. Only happens when combining transition +
+                    // keep-alive + HOCs. (#4590)
+                    oldElm._leaveCb ? null : parentElm,
+                    nodeOps.nextSibling(oldElm)
+                )
+            }
+        }
+    }
+}
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(0)))
+
+/***/ }),
+/* 13 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(process) {/* harmony export (immutable) */ __webpack_exports__["a"] = initRender;
+/* harmony export (immutable) */ __webpack_exports__["b"] = renderMixin;
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__util_index__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__vdom_vnode__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__vdom_create_element__ = __webpack_require__(25);
+/**
+ * Created by zj on 2017/12/14.
+ */
+
+
+
+function initRender (vm) {
+    vm._vnode = null // the root of the child tree
+    vm._staticTrees = null // v-once cached trees
+    const options = vm.$options
+    const parentVnode = vm.$vnode = options._parentVnode // the placeholder node in parent tree
+    const renderContext = parentVnode && parentVnode.context
+    //vm.$createElement = function a(a,b){console.log('a',a);console.log('b',b);return 90}
+    // vm.$slots = resolveSlots(options._renderChildren, renderContext)
+    // vm.$scopedSlots = emptyObject
+    // bind the createElement fn to this instance
+    // so that we get proper render context inside it.
+    // args order: tag, data, children, normalizationType, alwaysNormalize
+    // internal version is used by render functions compiled from templates
+   // vm._c = (a, b, c, d) => createElement(vm, a, b, c, d, false)
+    // normalization is always applied for the public version, used in
+    // user-written render functions.
+    vm.$createElement = (a, b, c, d) => Object(__WEBPACK_IMPORTED_MODULE_2__vdom_create_element__["a" /* createElement */])(vm, a, b, c, d, true)
+
+    // $attrs & $listeners are exposed for easier HOC creation.
+    // they need to be reactive so that HOCs using them are always updated
+   // const parentData = parentVnode && parentVnode.data
+
+    /* istanbul ignore else */
+    // if (process.env.NODE_ENV !== 'production') {
+    //     defineReactive(vm, '$attrs', parentData && parentData.attrs || emptyObject, () => {
+    //         !isUpdatingChildComponent && warn(`$attrs is readonly.`, vm)
+    //     }, true)
+    //     defineReactive(vm, '$listeners', options._parentListeners || emptyObject, () => {
+    //         !isUpdatingChildComponent && warn(`$listeners is readonly.`, vm)
+    //     }, true)
+    // } else {
+    //     defineReactive(vm, '$attrs', parentData && parentData.attrs || emptyObject, null, true)
+    //     defineReactive(vm, '$listeners', options._parentListeners || emptyObject, null, true)
+    // }
+}
+
+function renderMixin (Vue) {
+    // install runtime convenience helpers
+    //installRenderHelpers(Vue.prototype)
+
+    Vue.prototype.$nextTick = function (fn) {
+        return nextTick(fn, this)
+    }
+
+    Vue.prototype._render = function (){
+        const vm = this
+        const { render, _parentVnode } = vm.$options
+
+        if (vm._isMounted) {
+            // if the parent didn't update, the slot nodes will be the ones from
+            // last render. They need to be cloned to ensure "freshness" for this render.
+            for (const key in vm.$slots) {
+                const slot = vm.$slots[key]
+                // _rendered is a flag added by renderSlot, but may not be present
+                // if the slot is passed from manually written render functions
+                if (slot._rendered || (slot[0] && slot[0].elm)) {
+                    vm.$slots[key] = cloneVNodes(slot, true /* deep */)
+                }
+            }
+        }
+
+        vm.$scopedSlots = (_parentVnode && _parentVnode.data.scopedSlots) || __WEBPACK_IMPORTED_MODULE_0__util_index__["a" /* emptyObject */]
+
+        // set parent vnode. this allows render functions to have access
+        // to the data on the placeholder node.
+        vm.$vnode = _parentVnode
+        // render self
+        let vnode
+        try {
+            console.log('vm._renderProxy',vm._renderProxy)
+            console.log('vm.$createElement',vm.$createElement)
+            //vnode = render.call(vm._renderProxy)
+            vnode = render.call(vm._renderProxy, vm.$createElement)
+            console.log('vnode',vnode)
+        } catch (e) {
+            console.log('e',e)
+            handleError(e, vm, `render`)
+            // return error render result,
+            // or previous vnode to prevent render error causing blank component
+            /* istanbul ignore else */
+            if (process.env.NODE_ENV !== 'production') {
+                if (vm.$options.renderError) {
+                    try {
+                        vnode = vm.$options.renderError.call(vm._renderProxy, vm.$createElement, e)
+                    } catch (e) {
+                        handleError(e, vm, `renderError`)
+                        vnode = vm._vnode
+                    }
+                } else {
+                    vnode = vm._vnode
+                }
+            } else {
+                vnode = vm._vnode
+            }
+        }
+        // return empty vnode in case the render function errored out
+        if (!(vnode instanceof __WEBPACK_IMPORTED_MODULE_1__vdom_vnode__["b" /* default */])) {
+            if (process.env.NODE_ENV !== 'production' && Array.isArray(vnode)) {
+                warn(
+                    'Multiple root nodes returned from render function. Render function ' +
+                    'should return a single root node.',
+                    vm
+                )
+            }
+            vnode = Object(__WEBPACK_IMPORTED_MODULE_1__vdom_vnode__["a" /* createEmptyVNode */])()
+        }
+        // set parent
+        vnode.parent = _parentVnode
+        return vnode
+    }
+}
+
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(0)))
+
+/***/ }),
+/* 14 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/**
+ * Created by zj on 2017/12/14.
+ */
+class VNode {
+    // tag: string | void;
+    // data: VNodeData | void;
+    // children: ?Array<VNode>;
+    // text: string | void;
+    // elm: Node | void;
+    // ns: string | void;
+    // context: Component | void; // rendered in this component's scope
+    // key: string | number | void;
+    // componentOptions: VNodeComponentOptions | void;
+    // componentInstance: Component | void; // component instance
+    // parent: VNode | void; // component placeholder node
+    //
+    // // strictly internal
+    // raw: boolean; // contains raw HTML? (server only)
+    // isStatic: boolean; // hoisted static node
+    // isRootInsert: boolean; // necessary for enter transition check
+    // isComment: boolean; // empty comment placeholder?
+    // isCloned: boolean; // is a cloned node?
+    // isOnce: boolean; // is a v-once node?
+    // asyncFactory: Function | void; // async component factory function
+    // asyncMeta: Object | void;
+    // isAsyncPlaceholder: boolean;
+    // ssrContext: Object | void;
+    // fnContext: Component | void; // real context vm for functional nodes
+    // fnOptions: ?ComponentOptions; // for SSR caching
+    // fnScopeId: ?string; // functioanl scope id support
+
+    constructor(tag,
+                data,
+                children,
+                text,
+                elm,
+                context,
+                componentOptions,
+                asyncFactory) {
+        this.tag = tag
+        this.data = data
+        this.children = children
+        this.text = text
+        this.elm = elm
+        this.ns = undefined
+        this.context = context
+        this.fnContext = undefined
+        this.fnOptions = undefined
+        this.fnScopeId = undefined
+        this.key = data && data.key
+        this.componentOptions = componentOptions
+        this.componentInstance = undefined
+        this.parent = undefined
+        this.raw = false
+        this.isStatic = false
+        this.isRootInsert = true
+        this.isComment = false
+        this.isCloned = false
+        this.isOnce = false
+        this.asyncFactory = asyncFactory
+        this.asyncMeta = undefined
+        this.isAsyncPlaceholder = false
+    }
+
+// DEPRECATED: alias for componentInstance for backwards compat.
+    /* istanbul ignore next */
+    get child() {
+        return this.componentInstance
+    }
+}
+/* harmony export (immutable) */ __webpack_exports__["b"] = VNode;
+
+
+const createEmptyVNode = (text) => {
+    const node = new VNode()
+    node.text = text
+    node.isComment = true
+    return node
+}
+/* harmony export (immutable) */ __webpack_exports__["a"] = createEmptyVNode;
+
+
+/***/ }),
+/* 15 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -910,15 +1496,15 @@ function query (el){
 /* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(0)))
 
 /***/ }),
-/* 9 */
+/* 16 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* WEBPACK VAR INJECTION */(function(process) {/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__web_runtime_index__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__web_util_index__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__core_config__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__core_util_perf__ = __webpack_require__(22);
+/* WEBPACK VAR INJECTION */(function(process) {/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__web_runtime_index__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__web_util_index__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__core_config__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__core_util_perf__ = __webpack_require__(11);
 /**
  * Created by zj on 2017/12/13.
  */
@@ -1011,14 +1597,14 @@ window.Vue = __WEBPACK_IMPORTED_MODULE_0__web_runtime_index__["a" /* default */]
 /* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(0)))
 
 /***/ }),
-/* 10 */
+/* 17 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__core_index__ = __webpack_require__(11);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__core_util_index__ = __webpack_require__(18);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__core_instance_lifescycle__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__util_index__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__core_index__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__core_util_index__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__core_instance_lifecycle__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__util_index__ = __webpack_require__(15);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__patch__ = __webpack_require__(26);
 /**
  * Created by zj on 2017/12/13.
@@ -1034,16 +1620,16 @@ __WEBPACK_IMPORTED_MODULE_0__core_index__["a" /* default */].prototype.__patch__
 __WEBPACK_IMPORTED_MODULE_0__core_index__["a" /* default */].prototype.$mount = function (el,
                                  hydrating) {
     el = el && __WEBPACK_IMPORTED_MODULE_1__core_util_index__["b" /* inBrowser */] ? Object(__WEBPACK_IMPORTED_MODULE_3__util_index__["a" /* query */])(el) : undefined
-    return Object(__WEBPACK_IMPORTED_MODULE_2__core_instance_lifescycle__["d" /* mountComponent */])(this, el, hydrating)
+    return Object(__WEBPACK_IMPORTED_MODULE_2__core_instance_lifecycle__["e" /* mountComponent */])(this, el, hydrating)
 }
 /* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0__core_index__["a" /* default */]);
 
 /***/ }),
-/* 11 */
+/* 18 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__global_api_index__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__global_api_index__ = __webpack_require__(19);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__instance_index_js__ = __webpack_require__(20);
 /**
  * Created by zj on 2017/12/6.
@@ -1054,13 +1640,13 @@ Object(__WEBPACK_IMPORTED_MODULE_0__global_api_index__["a" /* initGlobalAPI */])
 /* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_1__instance_index_js__["a" /* default */]);
 
 /***/ }),
-/* 12 */
+/* 19 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (immutable) */ __webpack_exports__["a"] = initGlobalAPI;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__config__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__shared_constants__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__config__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__shared_constants__ = __webpack_require__(4);
 /**
  * Created by zj on 2017/12/12.
  */
@@ -1078,8 +1664,32 @@ function initGlobalAPI(Vue) {
 }
 
 /***/ }),
-/* 13 */,
-/* 14 */
+/* 20 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__state__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__init__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__render__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__lifecycle__ = __webpack_require__(7);
+/**
+ * Created by zj on 2017/12/6.
+ */
+
+
+
+
+function  Vue(options) {
+    this._init(options);
+}
+Object(__WEBPACK_IMPORTED_MODULE_1__init__["a" /* initMixin */])(Vue);
+Object(__WEBPACK_IMPORTED_MODULE_0__state__["b" /* stateMixin */])(Vue);
+Object(__WEBPACK_IMPORTED_MODULE_3__lifecycle__["d" /* lifecycleMixin */])(Vue);
+Object(__WEBPACK_IMPORTED_MODULE_2__render__["b" /* renderMixin */])(Vue);
+/* harmony default export */ __webpack_exports__["a"] = (Vue);
+
+/***/ }),
+/* 21 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1087,10 +1697,10 @@ function initGlobalAPI(Vue) {
 /* harmony export (immutable) */ __webpack_exports__["b"] = observe;
 /* harmony export (immutable) */ __webpack_exports__["c"] = set;
 /* harmony export (immutable) */ __webpack_exports__["a"] = del;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__watcher__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__shared_util__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__dep__ = __webpack_require__(15);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__util_lang__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__watcher__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__shared_util__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__dep__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__util_lang__ = __webpack_require__(5);
 /**
  * Created by zj on 2017/12/8.
  */
@@ -1179,7 +1789,7 @@ function defineReactive(obj,
 }
 
 function observe(value, asRootData) {
-    if (!Object(__WEBPACK_IMPORTED_MODULE_1__shared_util__["d" /* isObject */])(value)) {
+    if (!Object(__WEBPACK_IMPORTED_MODULE_1__shared_util__["e" /* isObject */])(value)) {
         return
     }
     let ob;
@@ -1190,7 +1800,7 @@ function observe(value, asRootData) {
 
 function set(target, key, val) {
     //判断是不是纯数组
-    if (Array.isArray(target) && Object(__WEBPACK_IMPORTED_MODULE_1__shared_util__["e" /* isValidArrayIndex */])(key)) {
+    if (Array.isArray(target) && Object(__WEBPACK_IMPORTED_MODULE_1__shared_util__["i" /* isValidArrayIndex */])(key)) {
         target.length = Math.max(target.length, key)
         target.splice(key, 1, val)
         return val
@@ -1222,7 +1832,7 @@ function set(target, key, val) {
  * Delete a property and trigger change if necessary.
  */
 function del(target, key) {
-    if (Array.isArray(target) && Object(__WEBPACK_IMPORTED_MODULE_1__shared_util__["e" /* isValidArrayIndex */])(key)) {
+    if (Array.isArray(target) && Object(__WEBPACK_IMPORTED_MODULE_1__shared_util__["i" /* isValidArrayIndex */])(key)) {
         target.splice(key, 1)
         return
     }
@@ -1246,62 +1856,23 @@ function del(target, key) {
 /* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(0)))
 
 /***/ }),
-/* 15 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (immutable) */ __webpack_exports__["c"] = pushTarget;
-/* harmony export (immutable) */ __webpack_exports__["b"] = popTarget;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__watcher__ = __webpack_require__(3);
-/**
- * Created by zj on 2017/12/8.
- */
-
-class Dep {
-    constructor() {
-        this.id = 1;
-        this.subs = [];
-    }
-    addSub(watcher) {
-        this.subs.push(watcher);
-    }
-    notify() {
-        const subs = this.subs.slice();
-        for(let i = 0;i<subs.length;i++) {
-            subs[i].update();
-        }
-    }
-}
-/* harmony export (immutable) */ __webpack_exports__["a"] = Dep;
-
-Dep.target = null;
-const targetStack = []
-
-function pushTarget (_target) {
-    if (Dep.target) targetStack.push(Dep.target)
-    Dep.target = _target
-}
-function popTarget () {
-    Dep.target = targetStack.pop()
-}
-
-
-/***/ }),
-/* 16 */
+/* 22 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(process) {/* harmony export (immutable) */ __webpack_exports__["a"] = initMixin;
 /* unused harmony export resolveConstructorOptions */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__config__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__util_index__ = __webpack_require__(18);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__util_options__ = __webpack_require__(17);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__state__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__proxy__ = __webpack_require__(23);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__lifescycle__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__config__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__util_index__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__util_options__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__state__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__proxy__ = __webpack_require__(24);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__lifecycle__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__render__ = __webpack_require__(13);
 /**
  * Created by zj on 2017/12/8.
  */
+
 
 
 
@@ -1315,10 +1886,10 @@ function initMixin(Vue) {
         vm._uid = uid++;
         let startTag, endTag
         /* istanbul ignore if */
-        if (process.env.NODE_ENV !== 'production' && __WEBPACK_IMPORTED_MODULE_0__config__["a" /* default */].performance && __WEBPACK_IMPORTED_MODULE_1__util_index__["d" /* mark */]) {
+        if (process.env.NODE_ENV !== 'production' && __WEBPACK_IMPORTED_MODULE_0__config__["a" /* default */].performance && __WEBPACK_IMPORTED_MODULE_1__util_index__["h" /* mark */]) {
             startTag = `vue-perf-start:${vm._uid}`
             endTag = `vue-perf-end:${vm._uid}`
-            Object(__WEBPACK_IMPORTED_MODULE_1__util_index__["d" /* mark */])(startTag)
+            Object(__WEBPACK_IMPORTED_MODULE_1__util_index__["h" /* mark */])(startTag)
         }
 
         // a flag to avoid this being observed
@@ -1342,10 +1913,11 @@ function initMixin(Vue) {
         } else {
             vm._renderProxy = vm
         }
-        Object(__WEBPACK_IMPORTED_MODULE_5__lifescycle__["b" /* initLifecycle */])(vm);
-        Object(__WEBPACK_IMPORTED_MODULE_5__lifescycle__["a" /* callHook */])(vm, 'beforeCreate');
+        Object(__WEBPACK_IMPORTED_MODULE_5__lifecycle__["c" /* initLifecycle */])(vm);
+        Object(__WEBPACK_IMPORTED_MODULE_6__render__["a" /* initRender */])(vm);
+        Object(__WEBPACK_IMPORTED_MODULE_5__lifecycle__["b" /* callHook */])(vm, 'beforeCreate');
         Object(__WEBPACK_IMPORTED_MODULE_3__state__["a" /* initState */])(vm);
-        Object(__WEBPACK_IMPORTED_MODULE_5__lifescycle__["a" /* callHook */])(vm, 'created');
+        Object(__WEBPACK_IMPORTED_MODULE_5__lifecycle__["b" /* callHook */])(vm, 'created');
         if (vm.$options.el) {
             vm.$mount(vm.$options.el)
         }
@@ -1358,15 +1930,15 @@ function resolveConstructorOptions (Ctor) {
 /* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(0)))
 
 /***/ }),
-/* 17 */
+/* 23 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* unused harmony export mergeDataOrFn */
 /* harmony export (immutable) */ __webpack_exports__["a"] = mergeOptions;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__shared_constants__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__config__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__shared_util__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__shared_constants__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__config__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__shared_util__ = __webpack_require__(3);
 /**
  * Created by zj on 2017/12/8.
  */
@@ -1465,198 +2037,13 @@ function mergeOptions(parent, child, vm) {
 }
 
 /***/ }),
-/* 18 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__shared_util__ = __webpack_require__(6);
-/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_0__shared_util__["a"]; });
-/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "c", function() { return __WEBPACK_IMPORTED_MODULE_0__shared_util__["f"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__env__ = __webpack_require__(19);
-/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "b", function() { return __WEBPACK_IMPORTED_MODULE_1__env__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__lang__ = __webpack_require__(2);
-/* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__perf__ = __webpack_require__(22);
-/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "d", function() { return __WEBPACK_IMPORTED_MODULE_3__perf__["a"]; });
-/**
- * Created by zj on 2017/12/13.
- */
-
-
-
-
-
-/***/ }),
-/* 19 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/**
- * Created by zj on 2017/12/13.
- */
-const inBrowser = typeof window !== 'undefined'
-/* harmony export (immutable) */ __webpack_exports__["a"] = inBrowser;
-
-
-/***/ }),
-/* 20 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__state__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__init__ = __webpack_require__(16);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__render__ = __webpack_require__(21);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__lifescycle__ = __webpack_require__(7);
-/**
- * Created by zj on 2017/12/6.
- */
-
-
-
-
-function  Vue(options) {
-    this._init(options);
-}
-Object(__WEBPACK_IMPORTED_MODULE_1__init__["a" /* initMixin */])(Vue);
-Object(__WEBPACK_IMPORTED_MODULE_0__state__["b" /* stateMixin */])(Vue);
-Object(__WEBPACK_IMPORTED_MODULE_3__lifescycle__["c" /* lifecycleMixin */])(Vue);
-Object(__WEBPACK_IMPORTED_MODULE_2__render__["a" /* renderMixin */])(Vue);
-/* harmony default export */ __webpack_exports__["a"] = (Vue);
-
-/***/ }),
-/* 21 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(process) {/* harmony export (immutable) */ __webpack_exports__["a"] = renderMixin;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__util_index__ = __webpack_require__(18);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__vdom_vnode__ = __webpack_require__(24);
-/**
- * Created by zj on 2017/12/14.
- */
-
-
-function renderMixin (Vue) {
-    // install runtime convenience helpers
-    //installRenderHelpers(Vue.prototype)
-
-    Vue.prototype.$nextTick = function (fn) {
-        return nextTick(fn, this)
-    }
-
-    Vue.prototype._render = function (){
-        const vm = this
-        const { render, _parentVnode } = vm.$options
-
-        if (vm._isMounted) {
-            // if the parent didn't update, the slot nodes will be the ones from
-            // last render. They need to be cloned to ensure "freshness" for this render.
-            for (const key in vm.$slots) {
-                const slot = vm.$slots[key]
-                // _rendered is a flag added by renderSlot, but may not be present
-                // if the slot is passed from manually written render functions
-                if (slot._rendered || (slot[0] && slot[0].elm)) {
-                    vm.$slots[key] = cloneVNodes(slot, true /* deep */)
-                }
-            }
-        }
-
-        vm.$scopedSlots = (_parentVnode && _parentVnode.data.scopedSlots) || __WEBPACK_IMPORTED_MODULE_0__util_index__["a" /* emptyObject */]
-
-        // set parent vnode. this allows render functions to have access
-        // to the data on the placeholder node.
-        vm.$vnode = _parentVnode
-        // render self
-        let vnode
-        try {
-            console.log('render',render)
-            console.log('vm._renderProxy',vm._renderProxy)
-            console.log('vm.$createElement',vm.$createElement)
-            vnode = render.call(vm._renderProxy)
-            //vnode = render.call(vm._renderProxy, vm.$createElement)
-        } catch (e) {
-            handleError(e, vm, `render`)
-            // return error render result,
-            // or previous vnode to prevent render error causing blank component
-            /* istanbul ignore else */
-            if (process.env.NODE_ENV !== 'production') {
-                if (vm.$options.renderError) {
-                    try {
-                        vnode = vm.$options.renderError.call(vm._renderProxy, vm.$createElement, e)
-                    } catch (e) {
-                        handleError(e, vm, `renderError`)
-                        vnode = vm._vnode
-                    }
-                } else {
-                    vnode = vm._vnode
-                }
-            } else {
-                vnode = vm._vnode
-            }
-        }
-        // return empty vnode in case the render function errored out
-        if (!(vnode instanceof __WEBPACK_IMPORTED_MODULE_1__vdom_vnode__["b" /* default */])) {
-            if (process.env.NODE_ENV !== 'production' && Array.isArray(vnode)) {
-                warn(
-                    'Multiple root nodes returned from render function. Render function ' +
-                    'should return a single root node.',
-                    vm
-                )
-            }
-            vnode = Object(__WEBPACK_IMPORTED_MODULE_1__vdom_vnode__["a" /* createEmptyVNode */])()
-        }
-        // set parent
-        vnode.parent = _parentVnode
-        return vnode
-    }
-}
-
-/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(0)))
-
-/***/ }),
-/* 22 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(process) {/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return mark; });
-/* unused harmony export measure */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__env__ = __webpack_require__(19);
-/**
- * Created by zj on 2017/12/14.
- */
-
-let mark
-let measure
-
-if (process.env.NODE_ENV !== 'production') {
-    const perf = __WEBPACK_IMPORTED_MODULE_0__env__["a" /* inBrowser */] && window.performance
-    /* istanbul ignore if */
-    if (
-        perf &&
-        perf.mark &&
-        perf.measure &&
-        perf.clearMarks &&
-        perf.clearMeasures
-    ) {
-        mark = tag => perf.mark(tag)
-        measure = (name, startTag, endTag) => {
-            perf.measure(name, startTag, endTag)
-            perf.clearMarks(startTag)
-            perf.clearMarks(endTag)
-            perf.clearMeasures(name)
-        }
-    }
-}
-/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(0)))
-
-/***/ }),
-/* 23 */
+/* 24 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(process) {/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return initProxy; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__config__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__util_index__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__config__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__util_index__ = __webpack_require__(2);
 /**
  * Created by zj on 2017/12/14.
  */
@@ -1665,7 +2052,7 @@ if (process.env.NODE_ENV !== 'production') {
 let initProxy
 
 if (process.env.NODE_ENV !== 'production') {
-    const allowedGlobals = Object(__WEBPACK_IMPORTED_MODULE_1__util_index__["c" /* makeMap */])(
+    const allowedGlobals = Object(__WEBPACK_IMPORTED_MODULE_1__util_index__["g" /* makeMap */])(
         'Infinity,undefined,NaN,isFinite,isNaN,' +
         'parseFloat,parseInt,decodeURI,decodeURIComponent,encodeURI,encodeURIComponent,' +
         'Math,Number,Date,Array,Object,Boolean,String,RegExp,Map,Set,JSON,Intl,' +
@@ -1688,7 +2075,7 @@ if (process.env.NODE_ENV !== 'production') {
         Proxy.toString().match(/native code/)
 
     if (hasProxy) {
-        const isBuiltInModifier = Object(__WEBPACK_IMPORTED_MODULE_1__util_index__["c" /* makeMap */])('stop,prevent,self,ctrl,shift,alt,meta,exact')
+        const isBuiltInModifier = Object(__WEBPACK_IMPORTED_MODULE_1__util_index__["g" /* makeMap */])('stop,prevent,self,ctrl,shift,alt,meta,exact')
         __WEBPACK_IMPORTED_MODULE_0__config__["a" /* default */].keyCodes = new Proxy(__WEBPACK_IMPORTED_MODULE_0__config__["a" /* default */].keyCodes, {
             set (target, key, value) {
                 if (isBuiltInModifier(key)) {
@@ -1740,104 +2127,118 @@ if (process.env.NODE_ENV !== 'production') {
 /* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(0)))
 
 /***/ }),
-/* 24 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/**
- * Created by zj on 2017/12/14.
- */
-class VNode {
-    // tag: string | void;
-    // data: VNodeData | void;
-    // children: ?Array<VNode>;
-    // text: string | void;
-    // elm: Node | void;
-    // ns: string | void;
-    // context: Component | void; // rendered in this component's scope
-    // key: string | number | void;
-    // componentOptions: VNodeComponentOptions | void;
-    // componentInstance: Component | void; // component instance
-    // parent: VNode | void; // component placeholder node
-    //
-    // // strictly internal
-    // raw: boolean; // contains raw HTML? (server only)
-    // isStatic: boolean; // hoisted static node
-    // isRootInsert: boolean; // necessary for enter transition check
-    // isComment: boolean; // empty comment placeholder?
-    // isCloned: boolean; // is a cloned node?
-    // isOnce: boolean; // is a v-once node?
-    // asyncFactory: Function | void; // async component factory function
-    // asyncMeta: Object | void;
-    // isAsyncPlaceholder: boolean;
-    // ssrContext: Object | void;
-    // fnContext: Component | void; // real context vm for functional nodes
-    // fnOptions: ?ComponentOptions; // for SSR caching
-    // fnScopeId: ?string; // functioanl scope id support
-
-    constructor(tag,
-                data,
-                children,
-                text,
-                elm,
-                context,
-                componentOptions,
-                asyncFactory) {
-        this.tag = tag
-        this.data = data
-        this.children = children
-        this.text = text
-        this.elm = elm
-        this.ns = undefined
-        this.context = context
-        this.fnContext = undefined
-        this.fnOptions = undefined
-        this.fnScopeId = undefined
-        this.key = data && data.key
-        this.componentOptions = componentOptions
-        this.componentInstance = undefined
-        this.parent = undefined
-        this.raw = false
-        this.isStatic = false
-        this.isRootInsert = true
-        this.isComment = false
-        this.isCloned = false
-        this.isOnce = false
-        this.asyncFactory = asyncFactory
-        this.asyncMeta = undefined
-        this.isAsyncPlaceholder = false
-    }
-
-// DEPRECATED: alias for componentInstance for backwards compat.
-    /* istanbul ignore next */
-    get child() {
-        return this.componentInstance
-    }
-}
-/* harmony export (immutable) */ __webpack_exports__["b"] = VNode;
-
-
-const createEmptyVNode = (text) => {
-    const node = new VNode()
-    node.text = text
-    node.isComment = true
-    return node
-}
-/* harmony export (immutable) */ __webpack_exports__["a"] = createEmptyVNode;
-
-
-/***/ }),
 /* 25 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (immutable) */ __webpack_exports__["a"] = createPatchFunction;
+/* harmony export (immutable) */ __webpack_exports__["a"] = createElement;
+/* unused harmony export _createElement */
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__vnode__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__core_util__ = __webpack_require__(2);
 /**
- * Created by zj on 2017/12/14.
+ * Created by zj on 2017/12/15.
  */
-function createPatchFunction (backend) {
-    return function patch() {
 
+
+const SIMPLE_NORMALIZE = 1
+const ALWAYS_NORMALIZE = 2
+function createElement(context,
+                              tag,
+                              data,
+                              children,
+                              normalizationType,
+                              alwaysNormalize) {
+    // if (Array.isArray(data) || isPrimitive(data)) {
+    //     normalizationType = children
+    //     children = data
+    //     data = undefined
+    // }
+    // if (isTrue(alwaysNormalize)) {
+    //     normalizationType = ALWAYS_NORMALIZE
+    // }
+    return _createElement(context, tag, data, children, normalizationType)
+}
+
+function _createElement(context,
+                               tag,
+                               data,
+                               children,
+                               normalizationType) {
+    // if (isDef(data) && isDef((data).__ob__))
+    // {
+    //     process.env.NODE_ENV !== 'production' && warn(
+    //         `Avoid using observed data object as vnode data: ${JSON.stringify(data)}\n` +
+    //         'Always create fresh vnode data objects in each render!',
+    //         context
+    //     )
+    //     return createEmptyVNode()
+    // }
+    // // object syntax in v-bind
+    // if (isDef(data) && isDef(data.is)) {
+    //     tag = data.is
+    // }
+    if (!tag) {
+        // in case of component :is set to falsy value
+        return Object(__WEBPACK_IMPORTED_MODULE_0__vnode__["a" /* createEmptyVNode */])()
+    }
+    // warn against non-primitive key
+    // if (process.env.NODE_ENV !== 'production' &&
+    //     isDef(data) && isDef(data.key) && !isPrimitive(data.key)
+    // ) {
+    //     warn(
+    //         'Avoid using non-primitive value as key, ' +
+    //         'use string/number value instead.',
+    //         context
+    //     )
+    // }
+    // support single function children as default scoped slot
+    if (Array.isArray(children) &&
+        typeof children[0] === 'function'
+    ) {
+        data = data || {}
+        data.scopedSlots = {default: children[0]}
+        children.length = 0
+    }
+    if (normalizationType === ALWAYS_NORMALIZE) {
+        children = normalizeChildren(children)
+    } else if (normalizationType === SIMPLE_NORMALIZE) {
+        children = simpleNormalizeChildren(children)
+    }
+    let vnode, ns
+    if (typeof tag === 'string') {
+        // let Ctor
+        // ns = (context.$vnode && context.$vnode.ns) || config.getTagNamespace(tag)
+        // if (config.isReservedTag(tag)) {
+        //     // platform built-in elements
+        //     vnode = new VNode(
+        //         config.parsePlatformTagName(tag), data, children,
+        //         undefined, undefined, context
+        //     )
+        // } else if (isDef(Ctor = resolveAsset(context.$options, 'components', tag))) {
+        //     // component
+        //     vnode = createComponent(Ctor, data, context, children, tag)
+        // } else {
+        //     // unknown or unlisted namespaced elements
+        //     // check at runtime because it may get assigned a namespace when its
+        //     // parent normalizes children
+        //     vnode = new VNode(
+        //         tag, data, children,
+        //         undefined, undefined, context
+        //     )
+        // }
+        vnode = new __WEBPACK_IMPORTED_MODULE_0__vnode__["b" /* default */](
+            tag, data, children,
+            undefined, undefined, context
+        )
+    } else {
+        // direct component options / constructor
+        vnode = createComponent(tag, data, context, children)
+    }
+    if (Object(__WEBPACK_IMPORTED_MODULE_1__core_util__["c" /* isDef */])(vnode)) {
+       // if (ns) applyNS(vnode, ns)
+        return vnode
+    } else {
+        return Object(__WEBPACK_IMPORTED_MODULE_0__vnode__["a" /* createEmptyVNode */])()
     }
 }
 
@@ -1846,14 +2247,58 @@ function createPatchFunction (backend) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__core_vdom_patch__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__core_vdom_patch__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_ops__ = __webpack_require__(27);
 /**
  * Created by zj on 2017/12/14.
  */
 
-const patch = Object(__WEBPACK_IMPORTED_MODULE_0__core_vdom_patch__["a" /* createPatchFunction */])()
+
+const patch = Object(__WEBPACK_IMPORTED_MODULE_0__core_vdom_patch__["a" /* createPatchFunction */])(__WEBPACK_IMPORTED_MODULE_1__node_ops__);
 /* harmony export (immutable) */ __webpack_exports__["a"] = patch;
 
+
+/***/ }),
+/* 27 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony export (immutable) */ __webpack_exports__["createElement"] = createElement;
+/* harmony export (immutable) */ __webpack_exports__["tagName"] = tagName;
+/* harmony export (immutable) */ __webpack_exports__["parentNode"] = parentNode;
+/* harmony export (immutable) */ __webpack_exports__["nextSibling"] = nextSibling;
+/* harmony export (immutable) */ __webpack_exports__["createTextNode"] = createTextNode;
+/* harmony export (immutable) */ __webpack_exports__["insertBefore"] = insertBefore;
+/**
+ * Created by zj on 2017/12/15.
+ */
+function createElement (tagName, vnode){
+    const elm = document.createElement(tagName)
+    if (tagName !== 'select') {
+        return elm
+    }
+    // false or null will remove the attribute but undefined will not
+    if (vnode.data && vnode.data.attrs && vnode.data.attrs.multiple !== undefined) {
+        elm.setAttribute('multiple', 'multiple')
+    }
+    return elm
+}
+function tagName (node){
+    return node.tagName
+}
+function parentNode (node){
+    return node.parentNode
+}
+function nextSibling (node){
+    return node.nextSibling
+}
+function createTextNode (text) {
+    return document.createTextNode(text)
+}
+function insertBefore (parentNode, newNode, referenceNode) {
+    parentNode.insertBefore(newNode, referenceNode)
+}
 
 /***/ })
 /******/ ]);

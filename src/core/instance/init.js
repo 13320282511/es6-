@@ -6,7 +6,8 @@ import {mark} from '../util/index'
 import {mergeOptions} from '../util/options';
 import {initState} from './state'
 import {initProxy} from './proxy'
-import {callHook,initLifecycle} from './lifescycle'
+import {callHook,initLifecycle} from './lifecycle'
+import {initRender} from './render'
 let uid = 0;
 export function initMixin(Vue) {
     Vue.prototype._init = function(options) {
@@ -42,6 +43,7 @@ export function initMixin(Vue) {
             vm._renderProxy = vm
         }
         initLifecycle(vm);
+        initRender(vm);
         callHook(vm, 'beforeCreate');
         initState(vm);
         callHook(vm, 'created');

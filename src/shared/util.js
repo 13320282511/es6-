@@ -12,11 +12,27 @@ const hasOwnProperty = Object.prototype.hasOwnProperty
 export function hasOwn(obj, key) {
     return hasOwnProperty.call(obj, key)
 }
+// these helpers produces better vm code in JS engines due to their
+// explicitness and function inlining
+export function isUndef (v){
+    return v === undefined || v === null
+}
 
+export function isDef (v) {
+    return v !== undefined && v !== null
+}
 export function isObject(obj) {
     return obj !== null && typeof obj === 'object'
 }
-
+export function isTrue (v){
+    return v === true
+}
+/**
+ * Check if value is primitive
+ */
+export function isPrimitive (value){
+    return typeof value === 'string' || typeof value === 'number'
+}
 /**
  * Check if val is a valid array index.
  */

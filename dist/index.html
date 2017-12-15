@@ -24,8 +24,9 @@
                 name:'wudi'
             }
         },
-        render() {
-            console.log('this',this)
+        render(createElement) {
+            //console.log('this',this)
+            return createElement('h1','测试')
 
         },
         created() {

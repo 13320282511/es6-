@@ -12,5 +12,14 @@ export default {
     /**
      * Custom user key aliases for v-on
      */
-    keyCodes: Object.create(null)
+    keyCodes: Object.create(null),
+    /**
+     * Ignore certain custom elements
+     */
+    ignoredElements: [],
+    /**
+     * Check if a tag is an unknown element.
+     * Platform-dependent.
+     */
+    isUnknownElement: () => false
 }

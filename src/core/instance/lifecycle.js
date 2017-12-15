@@ -3,7 +3,6 @@
  */
 import Watcher from '../observer/watcher'
 import {createPatchFunction} from '../vdom/patch'
-console.log('createPatchFunction',createPatchFunction)
 export let activeInstance = null;
 export function initLifecycle (vm) {
     const options = vm.$options
@@ -111,8 +110,11 @@ export function lifecycleMixin (Vue) {
         vm._vnode = vnode
         // Vue.prototype.__patch__ is injected in entry points
         // based on the rendering backend used.
+        console.log('prevVnode',prevVnode)
         if (!prevVnode) {
             // initial render
+            console.log('vm.$el',vm.$el)
+            console.log('vnode',vnode)
             vm.$el = vm.__patch__(
                 vm.$el, vnode, hydrating, false /* removeOnly */,
                 vm.$options._parentElm,

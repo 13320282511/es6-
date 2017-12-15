@@ -4,7 +4,7 @@
 // public mount method
 import Vue from '../../../core/index'
 import {inBrowser} from '../../../core/util/index'
-import {mountComponent} from '../../../core/instance/lifescycle'
+import {mountComponent} from '../../../core/instance/lifecycle'
 import {query} from '../util/index'
 import {patch} from './patch'
 // install platform patch function
